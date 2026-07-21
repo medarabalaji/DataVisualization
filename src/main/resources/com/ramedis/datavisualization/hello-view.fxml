@@ -46,9 +46,9 @@
                 </center>
                 <right>
                     <VBox>
-                    <MFXButton id="themeBtn" text="Theme" translateY="13" styleClass="themeBtn" fx:id="themeBtn" prefWidth="100" prefHeight="40" rippleAnimateBackground="true" buttonType="RAISED" maxWidth="150"  onAction="#changeBgBtn">
+                    <MFXButton id="themeBtn" text="Theme" translateY="13" styleClass="themeBtn" fx:id="themeBtn" rippleAnimateBackground="true" buttonType="RAISED" maxWidth="150"  onAction="#changeBgBtn">
                         <graphic>
-                            <FontIcon iconLiteral="mdi2t-theme-light-dark" fx:id="themeLogoColor"/>
+                            <FontIcon iconLiteral="mdi2t-theme-light-dark" iconColor="white" fx:id="themeLogoColor"/>
                         </graphic>
                     </MFXButton>
                     </VBox>
@@ -80,7 +80,7 @@
                     </HBox>
                 </center>
                 <right>
-                    <MFXButton id="applyBtn" prefWidth="100" prefHeight="40" buttonType="RAISED" computeRadiusMultiplier="true" depthLevel="LEVEL1" rippleAnimateBackground="true" rippleAnimateShadow="true" rippleAnimationSpeed="20" rippleColor="green" rippleRadius="20" fx:id="applyBtn" text="Apply" onAction="#applyBtn">
+                    <MFXButton id="applyBtn"  buttonType="RAISED" computeRadiusMultiplier="true" depthLevel="LEVEL1" rippleAnimateBackground="true" rippleAnimateShadow="true" rippleAnimationSpeed="20" rippleColor="green" rippleRadius="20" fx:id="applyBtn" text="Apply" onAction="#applyBtn">
                         <graphic>
                             <FontIcon iconLiteral="mdi2a-account-alert" iconColor="white" iconSize="20"/>
                         </graphic>

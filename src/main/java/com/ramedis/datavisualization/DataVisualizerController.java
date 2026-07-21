@@ -499,11 +499,12 @@ public void categorySelectionClick(ActionEvent event) {
   private void applyLightMode(){
     totalScreen.setStyle("-fx-background-color: white");
     themeBtn.setStyle("-fx-text-fill: #000000;-fx-background-color: transparent; ");
-
+    applyBtn.setStyle("-fx-text-fill: #000000;-fx-background-color: transparent; ");
   }
   private void applyDarkMode(){
     totalScreen.setStyle("-fx-background-color: #000000; ");
-    themeBtn.setStyle("-fx-text-fill: #ec641c; -fx-background-color: #2a2a2a");
+    themeBtn.setStyle(" -fx-background-color: #2a2a2a");
+    applyBtn.setStyle(" -fx-background-color: #2a2a2a");
 
   }
 

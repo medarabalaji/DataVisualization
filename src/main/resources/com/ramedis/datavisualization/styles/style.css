@@ -94,7 +94,7 @@
     -fx-padding: 0 0 0 0;
 }*/
 .mfx-button{
-    -fx-background-color: #b1b1b1;
+    -fx-background-color: transparent;
     -fx-text-fill: #ffffff;
     -fx-alignment: center;
     -fx-font-size: 15;
@@ -248,7 +248,7 @@
 #arrayBtns{
     -fx-alignment: center;
     -fx-translate-x: 60;
-        -fx-translate-y: -20;
+    -fx-translate-y: -20;
 }
 #setControlLabel{
     -fx-font-size: 25;
@@ -284,7 +284,7 @@
         -fx-pref-width: 70;
         -fx-pref-height: 20;
         -fx-translate-y: -30;
-
+        -fx-border-width: 0 0 1 0;
         -fx-border-radius: 0;
         -fx-text-alignment: center;
 }
@@ -293,7 +293,7 @@
         -fx-pref-width: 70;
         -fx-pref-height: 20;
         -fx-translate-y: -30;
-
+        -fx-border-width: 0 0 1 0;
         -fx-border-radius: 0;
         -fx-text-alignment: center;
 }
