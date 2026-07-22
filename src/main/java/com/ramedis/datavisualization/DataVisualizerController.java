@@ -68,6 +68,7 @@ private FontIcon themeLogoColor;
   private String selectedValueType;
   private String selectedDataType;
   private ArrayList<String> list = new ArrayList<>();
+  private ArrayList<Label> valueLabels = new ArrayList<>();
   private Map<Object, Object> map = new HashMap<>();
   private HashSet<String> set = new HashSet<>();
   private int capacity = 10;
@@ -99,23 +100,32 @@ private FontIcon themeLogoColor;
 
   @FXML
   private void refreshVisualization(){
-    visualizationPanelCard.getChildren().clear();
-    for(int i=0; i<capacity; i++){
-      Label indexCell = new Label(String.valueOf(i));
-      indexCell.setAlignment(Pos.CENTER);
-      indexCell.setStyle("-fx-font-size: 14; -fx-text-fill: red;");
+    if(visualizationPanelCard.getChildren().isEmpty()){
+      valueLabels.clear();
+      for(int i =0; i< capacity; i++){
+        Label indexCell = new Label(String.valueOf(i));
+        indexCell.setAlignment(Pos.CENTER);
+        indexCell.getStyleClass().add("listIndexCell");
 
-      Label valueCell = new Label();
-      valueCell.setPrefSize(100,40);
-      valueCell.setAlignment(Pos.CENTER);
-      valueCell.setStyle("-fx-font-size: 20;-fx-text-fill: blue; -fx-border-color: #ec641c; -fx-border-radius: 10; -fx-border-width: 2; -fx-border-style: dotted");
-      if(i<list.size()){
-        valueCell.setText(list.get(i));
+
+        Label valueCell = new Label();
+        valueCell.setPrefSize(100, 40);
+        valueCell.setAlignment(Pos.CENTER);
+        valueCell.getStyleClass().add("listValueCell");
+
+        VBox vbox = new VBox();
+        vbox.setAlignment(Pos.CENTER);
+        vbox.getChildren().addAll(indexCell, valueCell);
+        visualizationPanelCard.getChildren().add(vbox);
+        valueLabels.add(valueCell);
       }
-      VBox vBox = new VBox();
-      vBox.setAlignment(Pos.CENTER);
-      vBox.getChildren().addAll(indexCell,valueCell);
-      visualizationPanelCard.getChildren().add(vBox);
+    }
+    for(int i=0; i<capacity; i++){
+      if(i<list.size()){
+        valueLabels.get(i).setText(list.get(i));
+      }else {
+        valueLabels.get(i).setText("");
+      }
     }
   }
   @FXML
@@ -126,7 +136,7 @@ private FontIcon themeLogoColor;
       mapLabel.setTextFill(Color.BLUE);
       mapLabel.setPrefSize(250, 40);
       mapLabel.setAlignment(Pos.CENTER);
-      mapLabel.setStyle("-fx-border-color: #ec641c; -fx-border-width: 2; -fx-border-radius: 10; -fx-border-style: dotted; -fx-text-fill: blue;-fx-font-size: 16");
+      mapLabel.getStyleClass().add("mapLabel");
 
       visualizationPanelCard.getChildren().add(mapLabel);
     }
@@ -135,22 +145,25 @@ private FontIcon themeLogoColor;
   @FXML
   private void refreshVisualization3(){
     visualizationPanelCard.getChildren().clear();
-    int index = 0;
-    for(String value: set){
-      Label indexCell = new Label(String.valueOf(index));
+    List<String> values = new ArrayList<>(set);
+    for(int i=0; i<capacity; i++){
+      Label indexCell = new Label(String.valueOf(i));
       indexCell.setAlignment(Pos.CENTER);
-      indexCell.setStyle("-fx-font-size: 16; -fx-text-fill: blue;");
+      indexCell.getStyleClass().add("setIndexCell");
 
-      Label valueCell = new Label(value);
+      Label valueCell = new Label();
       valueCell.setPrefSize(100,40);
       valueCell.setAlignment(Pos.CENTER);
-      valueCell.setStyle("-fx-font-size: 20;-fx-text-fill: blue; -fx-border-color: #ec641c;-fx-border-radius: 10; -fx-border-style: dotted; -fx-border-width: 2");
+      valueCell.getStyleClass().add("setValueCell");
+
+      if(i<values.size()){
+        valueCell.setText(values.get(i));
+      }
 
       VBox box = new VBox(5);
       box.setAlignment(Pos.CENTER);
       box.getChildren().addAll(indexCell,valueCell);
       visualizationPanelCard.getChildren().add(box);
-      index++;
     }
   }
 //  @FXML
@@ -197,14 +210,13 @@ public void categorySelectionClick(ActionEvent event) {
 
   public void implementationSelectedCombo(ActionEvent actionEvent) {
 
-    addLog("Implementation type Selected");
-    addLog("Value "+implementCmb.getValue());
+    addLog("Selected Implementation is "+implementCmb.getValue());
+
 
     String selected = implementCmb.getValue();
     if(selected == null){
       return;
     }
-    addLog(selected+" is selected");
     switch (selected){
       case "ArrayList":
         configureArrayListUI();
@@ -236,24 +248,24 @@ public void categorySelectionClick(ActionEvent event) {
       list.clear();
       refreshVisualization();
     }catch (NumberFormatException e){
-      addLog("Please Enter a valid Size");
+      addErrorLog("Please Enter a valid Size");
     }
   }
-  public void clearBtn(ActionEvent actionEvent) {
-    list.clear();
-    visualizationPanelCard.getChildren().clear();
-    inpField.clear();
-    sizeField.clear();
-  }
-  public void removeBtn(ActionEvent actionEvent) {
-    String value = inpField.getText();
-    if(list.remove(value)){
-      refreshVisualization();
-    }else{
-      addLog("Value not found.");
-    }
-    inpField.clear();
-  }
+//  public void clearBtn(ActionEvent actionEvent) {
+//    list.clear();
+//    visualizationPanelCard.getChildren().clear();
+//    inpField.clear();
+//    sizeField.clear();
+//  }
+//  public void removeBtn(ActionEvent actionEvent) {
+//    String value = inpField.getText();
+//    if(list.remove(value)){
+//      refreshVisualization();
+//    }else{
+//      addErrorLog("Value not found.");
+//    }
+//    inpField.clear();
+//  }
   private void configureArrayListUI(){
     operationPanelCard.setVisible(true);
     operationPanelCard2.setVisible(false);
@@ -286,24 +298,24 @@ public void categorySelectionClick(ActionEvent event) {
     sizeField.clear();
     capacity=0;
   }
-@FXML
-  public void searchBtn(ActionEvent actionEvent) {
-    String value = inpField.getText();
-    for(int i=0; i<visualizationPanelCard.getChildren().size(); i++){
-      VBox bx = (VBox) visualizationPanelCard.getChildren().get(i);
-      Label valueLabel = (Label) bx.getChildren().get(1);
-      valueLabel.setStyle("-fx-font-size: 20;-fx-border-color: blue;-fx-border-radius: 10; -fx-border-style: dotted; -fx-border-width: 2; -fx-text-fill: blue");
-    }
-    for(int i=0; i<list.size(); i++){
-      if(list.get(i).equals(value)){
-        VBox box = (VBox) visualizationPanelCard.getChildren().get(i);
-        Label valueLabel = (Label) box.getChildren().get(1);
-        valueLabel.setStyle("-fx-font-size: 20; -fx-border-color: blue; -fx-border-radius: 10; -fx-border-width: 2; -fx-background-color: white; -fx-text-fill: blue; ");
-        break;
-      }
-      inpField.clear();
-    }
-  }
+//@FXML
+//  public void searchBtn(ActionEvent actionEvent) {
+//    String value = inpField.getText();
+//    for(int i=0; i<visualizationPanelCard.getChildren().size(); i++){
+//      VBox bx = (VBox) visualizationPanelCard.getChildren().get(i);
+//      Label valueLabel = (Label) bx.getChildren().get(1);
+//      valueLabel.setStyle("-fx-font-size: 20;-fx-border-color: blue;-fx-border-radius: 10; -fx-border-style: dotted; -fx-border-width: 2; -fx-text-fill: blue");
+//    }
+//    for(int i=0; i<list.size(); i++){
+//      if(list.get(i).equals(value)){
+//        VBox box = (VBox) visualizationPanelCard.getChildren().get(i);
+//        Label valueLabel = (Label) box.getChildren().get(1);
+//        valueLabel.setStyle("-fx-font-size: 20; -fx-border-color: blue; -fx-border-radius: 10; -fx-border-width: 2; -fx-background-color: white; -fx-text-fill: blue; ");
+//        break;
+//      }
+//      inpField.clear();
+//    }
+//  }
   public void changeBgBtn(ActionEvent actionEvent) {
     if(darkMode){
       applyDarkMode();
@@ -328,25 +340,25 @@ public void categorySelectionClick(ActionEvent event) {
   public void valueTypeSelectionClick(ActionEvent actionEvent) {
     selectedValueType = valueTypeCmb.getValue();
   }
-@FXML
-  public void onAdd(ActionEvent actionEvent) {
-      String value = inpField.getText();
-//  System.out.println(sizeField.getStyleClass());
-      if(!isValidDataType(value)){
-        addLog("Please Enter a "+selectedDataType+ " value.");
-        return;
-      }
-      if(value.isBlank()){
-        return;
-      }
-      if(list.size() == capacity){
-        capacity = capacity+capacity/2;
-        addLog("Array Capacity is increased by : "+capacity);
-      }
-      list.add(value);
-      refreshVisualization();
-      inpField.clear();
-  }
+//@FXML
+//  public void onAdd(ActionEvent actionEvent) {
+//      String value = inpField.getText();
+////  System.out.println(sizeField.getStyleClass());
+//      if(!isValidDataType(value)){
+//        addErrorLog("Please Enter a "+selectedDataType+ " value.");
+//        return;
+//      }
+//      if(value.isBlank()){
+//        return;
+//      }
+//      if(list.size() == capacity){
+//        capacity = capacity+capacity/2;
+//        addLog("Array Capacity is increased by : "+capacity);
+//      }
+//      list.add(value);
+//      refreshVisualization();
+//      inpField.clear();
+//  }
 
 
 
@@ -357,7 +369,7 @@ public void categorySelectionClick(ActionEvent event) {
   public void onSetAdd(ActionEvent actionEvent) {
     String value = setInpField.getText();
     if(!isValidDataType(value)){
-      addLog("Please Enter a "+selectedDataType+" value.");
+      addErrorLog("Please Enter a "+selectedDataType+" value.");
       return;
     }
     if(value.isBlank()){
@@ -371,7 +383,7 @@ public void categorySelectionClick(ActionEvent event) {
       addLog("Added : "+value);
       refreshVisualization3();
     }else {
-      addLog("Duplicate Element is not allowed");
+      addErrorLog("Duplicate Element is not allowed");
       addLog("Here the duplicate element is : "+value);
     }
     setInpField.clear();
@@ -383,7 +395,7 @@ public void categorySelectionClick(ActionEvent event) {
       addLog("Removed : "+value);
       refreshVisualization3();
     }else {
-      addLog("Element not found");
+      addErrorLog("Element not found");
     }
     setInpField.clear();
   }
@@ -393,7 +405,7 @@ public void categorySelectionClick(ActionEvent event) {
     if(set.contains(value)){
       addLog("Found : "+value);
     }else {
-      addLog(value+" not found");
+      addErrorLog(value+" not found");
     }
     setInpField.clear();
   }
@@ -408,12 +420,14 @@ public void categorySelectionClick(ActionEvent event) {
     String keyText = keyField.getText();
     String valueText = valueField.getText();
     if(keyText.isBlank() || valueText.isBlank()){
-      addLog("Please Enter both key and value");
+      addErrorLog("Please Enter both key and value");
       return;
     }
     try{
       Object key = convertValue(keyText,selectedKeyType);
+      addLog(key+" is entered");
       Object value = convertValue(valueText,selectedValueType);
+      addLog(value+" is entered");
       map.put(key, value);
       refreshVisualization2();
       keyField.clear();
@@ -426,19 +440,19 @@ public void categorySelectionClick(ActionEvent event) {
   public void mapRemoveBtn(ActionEvent actionEvent) {
     String keyText = keyField.getText();
     if(keyText.isBlank()){
-      addLog("Please enter a key");
+      addErrorLog("Please enter a key");
     }
     try{
       Object key = convertValue(keyText,selectedKeyType);
       if(map.containsKey(key)){
         map.remove(key);
         refreshVisualization2();
-        addLog("Key removed Successfully");
+        addLog(key+" removed Successfully");
       }else {
-        addLog("Key not found");
+        addErrorLog(key+" not found");
       }
     }catch (Exception e){
-      addLog("Invalid Key");
+      addErrorLog("Invalid Key");
     }
     keyField.clear();
   }
@@ -446,7 +460,7 @@ public void categorySelectionClick(ActionEvent event) {
   public void mapSearchBtn(ActionEvent actionEvent) {
     String keyText = keyField.getText();
     if(keyText.isBlank()){
-      addLog("Please enter a key");
+      addErrorLog("Please enter a key");
       return;
     }
     try{
@@ -455,10 +469,10 @@ public void categorySelectionClick(ActionEvent event) {
         Object value = map.get(key);
         addLog("Key is "+key+" and value is "+value);
       }else {
-        addLog("Key not found");
+        addErrorLog("Key not found");
       }
     }catch (Exception e){
-      addLog("Invalid key");
+      addErrorLog("Invalid key");
     }
     keyField.clear();
   }
@@ -525,4 +539,64 @@ public void categorySelectionClick(ActionEvent event) {
 
     logEventsField.getChildren().clear();
   }
+@FXML
+  public void listAddBtn(ActionEvent actionEvent) {
+    String value = inpField.getText();
+//  System.out.println(sizeField.getStyleClass());
+    if(!isValidDataType(value)){
+      addErrorLog("Please Enter a "+selectedDataType+ " value.");
+      return;
+    }
+    if(value.isBlank()){
+      return;
+    }
+    if(list.size() == capacity){
+      capacity = capacity+capacity/2;
+      addLog("Array Capacity is increased by : "+capacity);
+    }
+    list.add(value);
+    refreshVisualization();
+    inpField.clear();
+  }
+@FXML
+  public void listRemoveBtn(ActionEvent actionEvent) {
+  String value = inpField.getText();
+  if(list.remove(value)){
+    refreshVisualization();
+  }else{
+    addErrorLog("Value not found.");
+  }
+  inpField.clear();
+  }
+
+  public void listSearchBtn(ActionEvent actionEvent) {
+    String value = inpField.getText();
+    for(int i=0; i<visualizationPanelCard.getChildren().size(); i++){
+      VBox bx = (VBox) visualizationPanelCard.getChildren().get(i);
+      Label valueLabel = (Label) bx.getChildren().get(1);
+      valueLabel.getStyleClass().add("list-valueCell");
+    }
+    for(int i=0; i<list.size(); i++){
+      if(list.get(i).equals(value)){
+        VBox box = (VBox) visualizationPanelCard.getChildren().get(i);
+        Label valueLabel = (Label) box.getChildren().get(1);
+        valueLabel.setStyle("-fx-font-size: 20; -fx-border-color: blue; -fx-border-radius: 10; -fx-border-width: 2; -fx-background-color: white; -fx-text-fill: blue; ");
+        break;
+      }
+      inpField.clear();
+    }
+  }
+
+  public void listClearBtn(ActionEvent actionEvent) {
+    list.clear();
+    visualizationPanelCard.getChildren().clear();
+    inpField.clear();
+    sizeField.clear();
+  }
+  private void addErrorLog(String message){
+    Label label = new Label(message);
+    label.setStyle("-fx-font-size: 20; -fx-text-fill: red");
+    logEventsField.getChildren().add(label);
+  }
+
 }

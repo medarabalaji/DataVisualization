@@ -4,11 +4,11 @@
     -fx-background-color: #000000;
 }
 .DVlogo{
-    -fx-text-fill: #aaaaaa;
+    -fx-text-fill: red;
     -fx-alignment: center;
     -fx-text-alignment: center;
     -fx-font-size: 30;
-    -fx-padding: 30 0 0 0;
+    -fx-padding: 30 0 30 0;
     -fx-font-family: "Century Gothic";
 }
 .ctgLabel{
@@ -99,8 +99,7 @@
     -fx-alignment: center;
     -fx-font-size: 15;
     -fx-font-family: "Century Gothic";
-    -fx-pref-width: 100;
-    -fx-pref-height: 40;
+
 }
 
 
@@ -224,7 +223,7 @@
     -fx-text-alignment: center;
 }
 #keyValueTypeCmb{
-    -fx-translate-x: -122;
+    -fx-translate-x: -180;
 }
 #valueTypeCmb{
     -fx-translate-x: -40;
@@ -269,7 +268,7 @@
 }
 #setBtns{
     -fx-alignment: center;
-    -fx-translate-x: 60;
+    -fx-translate-x: 40;
         -fx-translate-y: -20;
 }
 #mapControlLabel{
@@ -297,10 +296,50 @@
         -fx-border-radius: 0;
         -fx-text-alignment: center;
 }
+#setAddBtn{
+-fx-pref-width: 120;
+    -fx-pref-height: 40;
+    -fx-text-fill: white;
+    -fx-font-size: 18;
+}
+#setRemoveBtn{
+-fx-pref-width: 120;
+    -fx-pref-height: 40;
+    -fx-text-fill: white;
+    -fx-font-size:18;
+}
+#setSearchBtn{
+-fx-pref-width: 120;
+    -fx-pref-height: 40;
+    -fx-text-fill: white;
+    -fx-font-size: 18;
+}
+#setClearBtn{
+-fx-pref-width: 120;
+    -fx-pref-height: 40;
+    -fx-text-fill: white;
+    -fx-font-size: 18;
+}
 #mapBtns{
 -fx-alignment: center;
-    -fx-translate-x: 60;
-    -fx-translate-y: -20;
+    -fx-translate-x: 40;
+        -fx-translate-y: -20;
+}
+#mapPutBtn{
+    -fx-pref-width: 120;
+    -fx-pref-height: 40;
+}
+#mapRemoveBtn{
+    -fx-pref-width: 120;
+    -fx-pref-height: 40;
+}
+#mapSearchBtn{
+    -fx-pref-width: 120;
+    -fx-pref-height: 40;
+}
+#mapClearBtn{
+    -fx-pref-width: 120;
+    -fx-pref-height: 40;
 }
 #visualizationPanel{
     -fx-font-size: 30;
@@ -336,6 +375,14 @@
     -fx-text-alignment: center;
     -fx-alignment: center;
 }
+#resetBtn{
+    -fx-pref-width: 120;
+    -fx-pref-height: 40;
+}
+#themeBtn{
+    -fx-pref-width: 120;
+    -fx-pref-height: 40;
+}
 .card{
   -fx-background-color:transparent;
 
@@ -355,5 +402,25 @@
          0,
          10
      );
+}
+.listIndexCell{
+    -fx-font-size: 14; -fx-text-fill: red
+}
+.listValueCell{
+      -fx-font-size: 20;
+     -fx-text-fill: blue;
+     -fx-border-color: #ec641c;
+     -fx-border-radius: 10;
+     -fx-border-width: 2;
+     -fx-border-style: dotted;
+}
+.setValueCell{
+-fx-font-size: 20;-fx-text-fill: blue; -fx-border-color: #ec641c;-fx-border-radius: 10; -fx-border-style: dotted; -fx-border-width: 2
+}
+.setIndexCell{
+-fx-font-size: 16; -fx-text-fill: blue;
+}
+.mapLabel{
+-fx-border-color: #ec641c; -fx-border-width: 2; -fx-border-radius: 10; -fx-border-style: dotted; -fx-text-fill: blue;-fx-font-size: 16
 }
 
