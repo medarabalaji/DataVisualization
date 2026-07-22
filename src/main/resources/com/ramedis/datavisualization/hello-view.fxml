@@ -230,7 +230,15 @@
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
-            <Label id="logLabel" text="Log Events"/>
+            <BorderPane>
+                <center>
+                    <Label id="logLabel" text="Log Events"/>
+                </center>
+                <right>
+                    <MFXButton fx:id="logClearBtn"  onAction="#logClearBtn" text="Log Clear" />
+                </right>
+            </BorderPane>
+
             <MFXScrollPane fx:id="logEventScrollPanel" prefHeight="350">
                 <content>
                     <VBox fx:id="logEventsField">

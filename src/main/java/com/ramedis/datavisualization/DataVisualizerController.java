@@ -520,4 +520,9 @@ public void categorySelectionClick(ActionEvent event) {
       inpField.clear();
       visualizationPanelCard.getChildren().clear();
   }
+
+  public void logClearBtn(ActionEvent actionEvent) {
+
+    logEventsField.getChildren().clear();
+  }
 }
