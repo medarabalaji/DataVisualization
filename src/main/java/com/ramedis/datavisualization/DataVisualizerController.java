@@ -63,7 +63,34 @@ public class DataVisualizerController {
   private VBox logEventsField;
 @FXML
 private FontIcon themeLogoColor;
-
+@FXML
+private MFXButton resetBtn;
+@FXML
+private MFXButton listAddButton;
+@FXML
+private MFXButton listRemoveButton;
+@FXML
+private MFXButton listSearchButton;
+@FXML
+private MFXButton listClearButton;
+@FXML
+private MFXButton setAddButton;
+@FXML
+private MFXButton setSearchButton;
+@FXML
+private MFXButton setRemoveButton;
+@FXML
+private MFXButton setClearButton;
+@FXML
+private MFXButton mapAddButton;
+@FXML
+private MFXButton mapSearchButton;
+@FXML
+private MFXButton mapRemoveButton;
+@FXML
+private MFXButton mapClearButton;
+@FXML
+private MFXButton logClearBtn;
   private String selectedKeyType;
   private String selectedValueType;
   private String selectedDataType;
@@ -100,9 +127,9 @@ private FontIcon themeLogoColor;
 
   @FXML
   private void refreshVisualization(){
-    if(visualizationPanelCard.getChildren().isEmpty()){
-      valueLabels.clear();
-      for(int i =0; i< capacity; i++){
+    if(valueLabels.size()<capacity){
+
+      for(int i =valueLabels.size(); i< capacity; i++){
         Label indexCell = new Label(String.valueOf(i));
         indexCell.setAlignment(Pos.CENTER);
         indexCell.getStyleClass().add("listIndexCell");
@@ -117,12 +144,15 @@ private FontIcon themeLogoColor;
         vbox.setAlignment(Pos.CENTER);
         vbox.getChildren().addAll(indexCell, valueCell);
         visualizationPanelCard.getChildren().add(vbox);
+
         valueLabels.add(valueCell);
       }
     }
     for(int i=0; i<capacity; i++){
+      valueLabels.get(i).getStyleClass().remove("listValueLabel");
       if(i<list.size()){
         valueLabels.get(i).setText(list.get(i));
+
       }else {
         valueLabels.get(i).setText("");
       }
@@ -193,7 +223,7 @@ private FontIcon themeLogoColor;
 public void categorySelectionClick(ActionEvent event) {
 
   String category = categoryCmb.getValue();
-
+addLog(category + " Category is selected ");
   if (category == null || category.equals("None")) {
     implementCmb.clearSelection();
     implementCmb.getItems().clear();
@@ -210,7 +240,7 @@ public void categorySelectionClick(ActionEvent event) {
 
   public void implementationSelectedCombo(ActionEvent actionEvent) {
 
-    addLog("Selected Implementation is "+implementCmb.getValue());
+    addLog(implementCmb.getValue()+" is implemented");
 
 
     String selected = implementCmb.getValue();
@@ -220,24 +250,24 @@ public void categorySelectionClick(ActionEvent event) {
     switch (selected){
       case "ArrayList":
         configureArrayListUI();
-        addLog("Configure ArrayList UI");
+        addLog("Configuring ArrayList UI");
         break;
       case "LinkedList":
-        addLog("Configure LinkedList UI");
+        addLog("Configuring LinkedList UI");
         break;
       case "HashSet":
         configureSetListUI();
-        addLog("Configure HashSet UI");
+        addLog("Configuring HashSet UI");
         break;
       case "TreeSet":
-        addLog("Configure TreeSet UI");
+        addLog("Configuring TreeSet UI");
         break;
       case "HashMap":
         configureMapListUI();
-        addLog("Configure HashMap UI");
+        addLog("Configuring HashMap UI");
         break;
       case "TreeMap":
-        addLog("Configure TreeMap UI");
+        addLog("Configuring TreeMap UI");
         break;
 
     }
@@ -245,6 +275,7 @@ public void categorySelectionClick(ActionEvent event) {
   public void applyBtn(ActionEvent actionEvent) {
     try{
       capacity = Integer.parseInt(sizeField.getText());
+      addLog("the size value is "+capacity);
       list.clear();
       refreshVisualization();
     }catch (NumberFormatException e){
@@ -512,14 +543,41 @@ public void categorySelectionClick(ActionEvent event) {
   }
   private void applyLightMode(){
     totalScreen.setStyle("-fx-background-color: white");
-    themeBtn.setStyle("-fx-text-fill: #000000;-fx-background-color: transparent; ");
-    applyBtn.setStyle("-fx-text-fill: #000000;-fx-background-color: transparent; ");
+    resetBtn.setStyle("-fx-text-fill: #000000; -fx-background-color: #aaaaaa;");
+    themeBtn.setStyle("-fx-text-fill: #000000;-fx-background-color: #aaaaaa; ");
+    applyBtn.setStyle("-fx-text-fill: #000000;-fx-background-color: #aaaaaa; ");
+    listAddButton.setStyle("-fx-text-fill: #000000;-fx-background-color: #aaaaaa; ");
+    listSearchButton.setStyle("-fx-text-fill: #000000;-fx-background-color: #aaaaaa; ");
+    listRemoveButton.setStyle("-fx-text-fill: #000000;-fx-background-color: #aaaaaa; ");
+    listClearButton.setStyle("-fx-text-fill: #000000;-fx-background-color: #aaaaaa; ");
+    setAddButton.setStyle("-fx-text-fill: #000000;-fx-background-color: #aaaaaa; ");
+    setSearchButton.setStyle("-fx-text-fill: #000000;-fx-background-color: #aaaaaa; ");
+    setRemoveButton.setStyle("-fx-text-fill: #000000;-fx-background-color: #aaaaaa; ");
+    setClearButton.setStyle("-fx-text-fill: #000000;-fx-background-color: #aaaaaa; ");
+    mapAddButton.setStyle("-fx-text-fill: #000000;-fx-background-color: #aaaaaa; ");
+    mapSearchButton.setStyle("-fx-text-fill: #000000;-fx-background-color: #aaaaaa; ");
+    mapRemoveButton.setStyle("-fx-text-fill: #000000;-fx-background-color: #aaaaaa; ");
+    mapClearButton.setStyle("-fx-text-fill: #000000;-fx-background-color: #aaaaaa; ");
+    logClearBtn.setStyle("-fx-text-fill: #000000; -fx-background-color: #aaaaaa");
   }
   private void applyDarkMode(){
     totalScreen.setStyle("-fx-background-color: #000000; ");
-    themeBtn.setStyle(" -fx-background-color: #2a2a2a");
-    applyBtn.setStyle(" -fx-background-color: #2a2a2a");
-
+    themeBtn.setStyle("-fx-text-fill: #ffffff; -fx-background-color: #2a2a2a");
+    applyBtn.setStyle("-fx-text-fill: #ffffff; -fx-background-color: #2a2a2a");
+    resetBtn.setStyle("-fx-text-fill: #ffffff;-fx-background-color: #2a2a2a");
+    listAddButton.setStyle("-fx-text-fill: #ffffff;-fx-background-color: #2a2a2a");
+    listSearchButton.setStyle("-fx-text-fill: #ffffff;-fx-background-color: #2a2a2a");
+    listRemoveButton.setStyle("-fx-text-fill: #ffffff;-fx-background-color: #2a2a2a");
+    listClearButton.setStyle("-fx-text-fill: #ffffff;-fx-background-color: #2a2a2a");
+    setAddButton.setStyle("-fx-text-fill: #ffffff;-fx-background-color: #2a2a2a");
+    setSearchButton.setStyle("-fx-text-fill: #ffffff;-fx-background-color: #2a2a2a");
+    setRemoveButton.setStyle("-fx-text-fill: #ffffff;-fx-background-color: #2a2a2a");
+    setClearButton.setStyle("-fx-text-fill: #ffffff;-fx-background-color: #2a2a2a");
+    mapAddButton.setStyle("-fx-text-fill: #ffffff;-fx-background-color: #2a2a2a");
+    mapSearchButton.setStyle("-fx-text-fill: #ffffff;-fx-background-color: #2a2a2a");
+    mapRemoveButton.setStyle("-fx-text-fill: #ffffff;-fx-background-color: #2a2a2a");
+    mapClearButton.setStyle("-fx-text-fill: #ffffff;-fx-background-color: #2a2a2a");
+    logClearBtn.setStyle("-fx-text-fill: #ffffff;");
   }
 
 
@@ -553,8 +611,10 @@ public void categorySelectionClick(ActionEvent event) {
     if(list.size() == capacity){
       capacity = capacity+capacity/2;
       addLog("Array Capacity is increased by : "+capacity);
+      refreshVisualization();
     }
     list.add(value);
+    addLog("Added value : "+value+" and its Index is "+(list.size()-1));
     refreshVisualization();
     inpField.clear();
   }
@@ -563,6 +623,7 @@ public void categorySelectionClick(ActionEvent event) {
   String value = inpField.getText();
   if(list.remove(value)){
     refreshVisualization();
+    addLog(value +" is successfully removed");
   }else{
     addErrorLog("Value not found.");
   }
@@ -571,20 +632,43 @@ public void categorySelectionClick(ActionEvent event) {
 
   public void listSearchBtn(ActionEvent actionEvent) {
     String value = inpField.getText();
-    for(int i=0; i<visualizationPanelCard.getChildren().size(); i++){
-      VBox bx = (VBox) visualizationPanelCard.getChildren().get(i);
-      Label valueLabel = (Label) bx.getChildren().get(1);
-      valueLabel.getStyleClass().add("list-valueCell");
+    if(value.isBlank()){
+      return;
     }
+
+    for(Label label : valueLabels){
+      label.getStyleClass().remove("listValueLabel");
+      if(!label.getStyleClass().contains("listValueCell")){
+        label.getStyleClass().add("listValueCell");
+      }
+    }
+    boolean found = false;
     for(int i=0; i<list.size(); i++){
       if(list.get(i).equals(value)){
-        VBox box = (VBox) visualizationPanelCard.getChildren().get(i);
-        Label valueLabel = (Label) box.getChildren().get(1);
-        valueLabel.setStyle("-fx-font-size: 20; -fx-border-color: blue; -fx-border-radius: 10; -fx-border-width: 2; -fx-background-color: white; -fx-text-fill: blue; ");
+        valueLabels.get(i).getStyleClass().add("listValueLabel");
+        addLog("Element found at index : "+i);
+        found=true;
         break;
       }
-      inpField.clear();
     }
+    if(!found){
+      addErrorLog("Element not found");
+    }
+    inpField.clear();
+//    for(int i=0; i<visualizationPanelCard.getChildren().size(); i++){
+//      VBox bx = (VBox) visualizationPanelCard.getChildren().get(i);
+//      Label valueLabel = (Label) bx.getChildren().get(1);
+//      valueLabel.getStyleClass().add("listValueCell");
+//    }
+//    for(int i=0; i<list.size(); i++){
+//      if(list.get(i).equals(value)){
+//        VBox box = (VBox) visualizationPanelCard.getChildren().get(i);
+//        Label valueLabel = (Label) box.getChildren().get(1);
+//        valueLabel.getStyleClass().add("listValueLabel");
+//        break;
+//      }
+//      inpField.clear();
+//    }
   }
 
   public void listClearBtn(ActionEvent actionEvent) {

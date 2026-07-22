@@ -46,12 +46,12 @@
                 </center>
                 <right>
                     <HBox alignment="CENTER" spacing="40">
-                        <MFXButton id="resetBtn" text="Reset" fx:id="resetBtn" rippleAnimateBackground="true" buttonType="RAISED" maxWidth="150"  onAction="#resetBtn">
+                        <MFXButton id="resetBtn" text="Reset" fx:id="resetBtn"  rippleAnimateBackground="true" buttonType="FLAT" maxWidth="150"  onAction="#resetBtn">
                             <graphic>
                                 <FontIcon iconLiteral="mdi2r-restart" iconColor="white" />
                             </graphic>
                         </MFXButton>
-                        <MFXButton id="themeBtn" text="Theme"  styleClass="themeBtn" translateY="-13" fx:id="themeBtn" rippleAnimateBackground="true" buttonType="RAISED" onAction="#changeBgBtn">
+                        <MFXButton id="themeBtn" text="Theme"  styleClass="themeBtn" translateY="-13"  fx:id="themeBtn" rippleAnimateBackground="true" buttonType="FLAT" onAction="#changeBgBtn">
                             <graphic>
                                 <FontIcon iconLiteral="mdi2t-theme-light-dark" iconColor="white" fx:id="themeLogoColor"/>
                             </graphic>
@@ -85,7 +85,7 @@
                     </HBox>
                 </center>
                 <right>
-                    <MFXButton id="applyBtn"  buttonType="RAISED" computeRadiusMultiplier="true" depthLevel="LEVEL1" rippleAnimateBackground="true" rippleAnimateShadow="true" rippleAnimationSpeed="20" rippleColor="green" rippleRadius="20" fx:id="applyBtn" text="Apply" onAction="#applyBtn">
+                    <MFXButton id="applyBtn"  buttonType="FLAT" computeRadiusMultiplier="true" depthLevel="LEVEL5" fx:id="applyBtn" text="Apply" onAction="#applyBtn">
                         <graphic>
                             <FontIcon iconLiteral="mdi2a-account-alert" iconColor="white" iconSize="20"/>
                         </graphic>
@@ -107,24 +107,24 @@
                 <MFXTextField id="arrayInpField" fx:id="inpField" promptText="Enter Value"/>
                 <VBox spacing="20" id="arrayBtns">
                     <HBox spacing="20">
-                        <MFXButton onAction="#listAddBtn" text="Add" >
+                        <MFXButton id="listAddBtn" fx:id="listAddButton" buttonType="FLAT" onAction="#listAddBtn" text="Add" >
                             <graphic>
                                 <FontIcon iconLiteral="mdi2p-plus-thick" iconColor="white"/>
                             </graphic>
                         </MFXButton>
-                        <MFXButton onAction="#listRemoveBtn" text="Remove">
+                        <MFXButton id="listRemoveBtn" fx:id="listRemoveButton" buttonType="FLAT" onAction="#listRemoveBtn" text="Remove">
                             <graphic>
                                 <FontIcon iconLiteral="mdi2m-minus-thick" iconColor="white"/>
                             </graphic>
                         </MFXButton>
                     </HBox>
                     <HBox spacing="20">
-                        <MFXButton onAction="#listSearchBtn" text="Search">
+                        <MFXButton id="listSearchBtn" fx:id="listSearchButton"  buttonType="FLAT" rippleAnimateBackground="true"  onAction="#listSearchBtn" text="Search">
                             <graphic>
                                 <FontIcon iconLiteral="mdi2m-magnify" iconColor="white"/>
                             </graphic>
                         </MFXButton>
-                        <MFXButton onAction="#listClearBtn" text="Clear" >
+                        <MFXButton id="listClearBtn" fx:id="listClearButton" buttonType="FLAT" onAction="#listClearBtn" text="Clear" >
                             <graphic>
                                 <FontIcon iconLiteral="mdi2c-close" iconColor="white"/>
                             </graphic>
@@ -137,24 +137,24 @@
                 <MFXTextField id="setInpField" fx:id="setInpField" promptText="Enter Value" style="-fx-text-fill: #EC641C;-fx-font-size: 20"/>
                 <VBox spacing="20" id="setBtns">
                     <HBox spacing="20">
-                        <MFXButton id="setAddBtn" onAction="#onSetAdd" text="Add">
+                        <MFXButton id="setAddBtn" fx:id="setAddButton" buttonType="FLAT" onAction="#onSetAdd" text="Add">
                             <graphic>
                                 <FontIcon iconLiteral="mdi2p-plus-thick" iconColor="white"/>
                             </graphic>
                         </MFXButton>
-                        <MFXButton id="setRemoveBtn" onAction="#removeSetBtn" text="Remove">
+                        <MFXButton id="setRemoveBtn" fx:id="setRemoveButton" buttonType="FLAT" onAction="#removeSetBtn" text="Remove">
                             <graphic>
                                 <FontIcon iconLiteral="mdi2m-minus-thick" iconColor="white"/>
                             </graphic>
                         </MFXButton>
                     </HBox>
                     <HBox spacing="20">
-                        <MFXButton id="setSearchBtn" onAction="#searchSetBtn" text="Search" >
+                        <MFXButton id="setSearchBtn" fx:id="setSearchButton" buttonType="FLAT" onAction="#searchSetBtn" text="Search" >
                             <graphic>
                                 <FontIcon iconLiteral="mdi2m-magnify" iconColor="white"/>
                             </graphic>
                         </MFXButton>
-                        <MFXButton id="setClearBtn" onAction="#clearSetBtn" text="Clear" >
+                        <MFXButton id="setClearBtn" fx:id="setClearButton" buttonType="FLAT" onAction="#clearSetBtn" text="Clear" >
                             <graphic>
                                 <FontIcon iconLiteral="mdi2c-close" iconColor="white"/>
                             </graphic>
@@ -173,24 +173,24 @@
                 </HBox>
                 <VBox spacing="20" id="mapBtns">
                     <HBox spacing="20">
-                        <MFXButton id="mapPutBtn" onAction="#putBtn" text="Put" style="-fx-font-size: 18;-fx-text-fill:white; ">
+                        <MFXButton id="mapPutBtn" buttonType="FLAT" fx:id="mapAddButton" onAction="#putBtn" text="Put" style="-fx-font-size: 18;-fx-text-fill:white; ">
                             <graphic>
                                 <FontIcon iconLiteral="mdi2p-plus-thick" iconColor="white"/>
                             </graphic>
                         </MFXButton>
-                        <MFXButton onAction="#mapRemoveBtn" id="mapRemoveBtn" text="Remove" style="-fx-font-size: 18;-fx-text-fill: white; ">
+                        <MFXButton onAction="#mapRemoveBtn" buttonType="FLAT" fx:id="mapRemoveButton" id="mapRemoveBtn" text="Remove" style="-fx-font-size: 18;-fx-text-fill: white; ">
                             <graphic>
                                 <FontIcon iconLiteral="mdi2m-minus-thick" iconColor="white"/>
                             </graphic>
                         </MFXButton>
                     </HBox>
                     <HBox spacing="20">
-                        <MFXButton onAction="#mapSearchBtn" id="mapSearchBtn" text="Search" style="-fx-font-size: 18;-fx-text-fill:white; ">
+                        <MFXButton onAction="#mapSearchBtn" buttonType="FLAT" fx:id="mapSearchButton" id="mapSearchBtn" text="Search" style="-fx-font-size: 18;-fx-text-fill:white; ">
                             <graphic>
                                 <FontIcon iconLiteral="mdi2m-magnify" iconColor="white"/>
                             </graphic>
                         </MFXButton>
-                        <MFXButton onAction="#mapClearBtn" id="mapClearBtn" text="Clear" style="-fx-font-size: 18;-fx-text-fill: white; ">
+                        <MFXButton onAction="#mapClearBtn"  buttonType="FLAT" fx:id="mapClearButton" id="mapClearBtn" text="Clear" style="-fx-font-size: 18;-fx-text-fill: white; ">
                             <graphic>
                                 <FontIcon iconLiteral="mdi2c-close" iconColor="white"/>
                             </graphic>
@@ -251,7 +251,7 @@
                     <Label id="logLabel" text="Log Events"/>
                 </center>
                 <right>
-                    <MFXButton fx:id="logClearBtn"  onAction="#logClearBtn" text="Log Clear" />
+                    <MFXButton id="logClearBtn" fx:id="logClearBtn"  buttonType="FLAT" onAction="#logClearBtn" text="Log Clear" />
                 </right>
             </BorderPane>
 

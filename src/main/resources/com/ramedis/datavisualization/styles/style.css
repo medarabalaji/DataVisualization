@@ -54,10 +54,20 @@
 #applyBtn{
     -fx-translate-x: -20;
     -fx-translate-y: 20;
+    -fx-pref-width: 120;
+        -fx-pref-height: 40;
+        -fx-text-fill: white;
+            -fx-font-size: 18;
+            -fx-cursor: hand;
 }
 #themeBtn{
     -fx-translate-y: -2;
     -fx-translate-x: -20;
+    -fx-pref-width: 120;
+        -fx-pref-height: 40;
+        -fx-text-fill: white;
+            -fx-font-size: 18;
+            -fx-cursor: hand;
 }
 .sizeLabel{
     -fx-text-fill: #aaaaaa;
@@ -94,7 +104,7 @@
     -fx-padding: 0 0 0 0;
 }*/
 .mfx-button{
-    -fx-background-color: transparent;
+    -fx-background-color: #2a2a2a;
     -fx-text-fill: #ffffff;
     -fx-alignment: center;
     -fx-font-size: 15;
@@ -246,7 +256,7 @@
 }
 #arrayBtns{
     -fx-alignment: center;
-    -fx-translate-x: 60;
+    -fx-translate-x: 40;
     -fx-translate-y: -20;
 }
 #setControlLabel{
@@ -296,29 +306,68 @@
         -fx-border-radius: 0;
         -fx-text-alignment: center;
 }
+#logClearBtn{
+-fx-pref-width: 120;
+    -fx-pref-height: 40;
+    -fx-text-fill: white;
+    -fx-font-size: 18;
+    -fx-cursor: hand;
+}
+#listAddBtn{
+-fx-pref-width: 120;
+    -fx-pref-height: 40;
+    -fx-text-fill: white;
+    -fx-font-size: 18;
+    -fx-cursor: hand;
+}
+#listRemoveBtn{
+-fx-pref-width: 120;
+    -fx-pref-height: 40;
+    -fx-text-fill: white;
+    -fx-font-size: 18;
+    -fx-cursor: hand;
+}
+#listSearchBtn{
+-fx-pref-width: 120;
+    -fx-pref-height: 40;
+    -fx-text-fill: white;
+    -fx-font-size: 18;
+    -fx-cursor: hand;
+}
+#listClearBtn{
+-fx-pref-width: 120;
+    -fx-pref-height: 40;
+    -fx-text-fill: white;
+    -fx-font-size: 18;
+    -fx-cursor: hand;
+}
 #setAddBtn{
 -fx-pref-width: 120;
     -fx-pref-height: 40;
     -fx-text-fill: white;
     -fx-font-size: 18;
+    -fx-cursor: hand;
 }
 #setRemoveBtn{
 -fx-pref-width: 120;
     -fx-pref-height: 40;
     -fx-text-fill: white;
     -fx-font-size:18;
+    -fx-cursor: hand;
 }
 #setSearchBtn{
 -fx-pref-width: 120;
     -fx-pref-height: 40;
     -fx-text-fill: white;
     -fx-font-size: 18;
+    -fx-cursor: hand;
 }
 #setClearBtn{
 -fx-pref-width: 120;
     -fx-pref-height: 40;
     -fx-text-fill: white;
     -fx-font-size: 18;
+    -fx-cursor: hand;
 }
 #mapBtns{
 -fx-alignment: center;
@@ -328,18 +377,30 @@
 #mapPutBtn{
     -fx-pref-width: 120;
     -fx-pref-height: 40;
+    -fx-text-fill: white;
+        -fx-font-size: 18;
+        -fx-cursor: hand;
 }
 #mapRemoveBtn{
     -fx-pref-width: 120;
     -fx-pref-height: 40;
+    -fx-text-fill: white;
+        -fx-font-size: 18;
+        -fx-cursor: hand;
 }
 #mapSearchBtn{
     -fx-pref-width: 120;
     -fx-pref-height: 40;
+    -fx-text-fill: white;
+        -fx-font-size: 18;
+        -fx-cursor: hand;
 }
 #mapClearBtn{
     -fx-pref-width: 120;
     -fx-pref-height: 40;
+    -fx-text-fill: white;
+        -fx-font-size: 18;
+        -fx-cursor: hand;
 }
 #visualizationPanel{
     -fx-font-size: 30;
@@ -364,10 +425,7 @@
   -fx-border-radius: 2.0em;
   -fx-background-insets: 3;
 }
-#visualScroll{
 
-
-}
 #logLabel{
     -fx-font-size: 30;
     -fx-text-fill: #b1b1b1;
@@ -378,22 +436,17 @@
 #resetBtn{
     -fx-pref-width: 120;
     -fx-pref-height: 40;
+    -fx-text-fill: white;
+    -fx-font-size: 18;
+    -fx-cursor: hand;
 }
-#themeBtn{
-    -fx-pref-width: 120;
-    -fx-pref-height: 40;
-}
+
 .card{
-  -fx-background-color:transparent;
-
+     -fx-background-color:transparent;
      -fx-background-radius:20;
-
      -fx-border-radius:20;
-
      -fx-border-color:#404040;
-
--fx-animated: true;
-
+     -fx-animated: true;
      -fx-effect:dropshadow(
          gaussian,
          rgba(0,0,0,0.45),
@@ -404,23 +457,44 @@
      );
 }
 .listIndexCell{
-    -fx-font-size: 14; -fx-text-fill: red
+    -fx-font-size: 14;
+    -fx-text-fill:#2C00FA;
 }
 .listValueCell{
       -fx-font-size: 20;
-     -fx-text-fill: blue;
-     -fx-border-color: #ec641c;
+     -fx-text-fill: red;
+     -fx-border-color: #2C00FA;
      -fx-border-radius: 10;
      -fx-border-width: 2;
      -fx-border-style: dotted;
 }
+.listValueLabel{
+    -fx-font-size: 20;
+    -fx-border-color: #2C00FA;
+    -fx-border-radius: 10;
+   -fx-border-width: 2;
+    -fx-background-color: green;
+    -fx-background-radius: 10;
+     -fx-text-fill: blue;
+}
 .setValueCell{
--fx-font-size: 20;-fx-text-fill: blue; -fx-border-color: #ec641c;-fx-border-radius: 10; -fx-border-style: dotted; -fx-border-width: 2
+-fx-font-size: 20;
+-fx-text-fill: #2C00FA;
+ -fx-border-color: #2C00FA;
+ -fx-border-radius: 10;
+  -fx-border-style: dotted;
+  -fx-border-width: 2
 }
 .setIndexCell{
--fx-font-size: 16; -fx-text-fill: blue;
+-fx-font-size: 16;
+-fx-text-fill: #2C00FA;
 }
 .mapLabel{
--fx-border-color: #ec641c; -fx-border-width: 2; -fx-border-radius: 10; -fx-border-style: dotted; -fx-text-fill: blue;-fx-font-size: 16
+-fx-border-color: #2C00FA;
+ -fx-border-width: 2;
+ -fx-border-radius: 10;
+ -fx-border-style: dotted;
+ -fx-text-fill: #2C00FA;
+ -fx-font-size: 16
 }
 
