@@ -45,13 +45,18 @@
                     </HBox>
                 </center>
                 <right>
-                    <VBox>
-                    <MFXButton id="themeBtn" text="Theme" translateY="13" styleClass="themeBtn" fx:id="themeBtn" rippleAnimateBackground="true" buttonType="RAISED" maxWidth="150"  onAction="#changeBgBtn">
-                        <graphic>
-                            <FontIcon iconLiteral="mdi2t-theme-light-dark" iconColor="white" fx:id="themeLogoColor"/>
-                        </graphic>
-                    </MFXButton>
-                    </VBox>
+                    <HBox alignment="CENTER" spacing="20">
+                        <MFXButton text="Reset" fx:id="resetBtn" rippleAnimateBackground="true" buttonType="RAISED" maxWidth="150"  onAction="#resetBtn">
+                            <graphic>
+                                <FontIcon iconLiteral="mdi2t-theme-light-dark" iconColor="white" />
+                            </graphic>
+                        </MFXButton>
+                        <MFXButton id="themeBtn" text="Theme"  styleClass="themeBtn" translateY="-13" fx:id="themeBtn" rippleAnimateBackground="true" buttonType="RAISED" onAction="#changeBgBtn">
+                            <graphic>
+                                <FontIcon iconLiteral="mdi2t-theme-light-dark" iconColor="white" fx:id="themeLogoColor"/>
+                            </graphic>
+                        </MFXButton>
+                    </HBox>
                 </right>
 
             </BorderPane>
@@ -70,7 +75,7 @@
                 <center>
                     <HBox spacing="50" alignment="CENTER">
                         <MFXComboBox id="dataTypeCmb" styleClass="dataTypeCmb" fx:id="dataTypeCmb" onAction="#dataTypeSelectionClick" />
-                        <HBox id="keyValueTypeCmb" fx:id="keyValueTypeCmb" spacing="30" >
+                        <HBox id="keyValueTypeCmb" visible="false" fx:id="keyValueTypeCmb" spacing="30" >
                             <Label styleClass="keyLabel" text="Key : " />
                             <MFXComboBox id="keyTypeCmb" fx:id="keyTypeCmb"  onAction="#keyTypeSelectionClick" />
                             <Label styleClass="valueLabel" text="Value : " />
@@ -226,7 +231,7 @@
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
             <Label id="logLabel" text="Log Events"/>
-            <MFXScrollPane fx:id="logEventScrollPanel" onScrollFinished="#scrollFinish" prefHeight="350">
+            <MFXScrollPane fx:id="logEventScrollPanel" prefHeight="350">
                 <content>
                     <VBox fx:id="logEventsField">
 

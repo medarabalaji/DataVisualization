@@ -56,7 +56,7 @@
     -fx-translate-y: 20;
 }
 #themeBtn{
-    -fx-translate-y: 15;
+    -fx-translate-y: -2;
     -fx-translate-x: -20;
 }
 .sizeLabel{

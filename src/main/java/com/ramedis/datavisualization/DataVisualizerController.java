@@ -508,8 +508,16 @@ public void categorySelectionClick(ActionEvent event) {
 
   }
 
-  @FXML
-  private void scrollFinish(Event event) {
-    addLog("Scroll finished");
+
+    public void resetBtn(ActionEvent actionEvent) {
+      categoryCmb.clearSelection();
+      implementCmb.clearSelection();
+      sizeField.clear();
+      keyTypeCmb.clearSelection();
+      valueTypeCmb.clearSelection();
+      dataTypeCmb.clearSelection();
+      logEventsField.getChildren().clear();
+      inpField.clear();
+      visualizationPanelCard.getChildren().clear();
   }
 }
