@@ -132,6 +132,36 @@
                     </HBox>
                 </VBox>
             </VBox>
+            <VBox fx:id="linkedListOperationPanelCard" visible="false" spacing="20">
+                <Label id="controlPanel" text="Controls"/>
+                <MFXTextField id="arrayInpField" fx:id="linkedListInpField" promptText="Enter Value"/>
+                <VBox spacing="20" id="arrayBtns">
+                    <HBox spacing="20">
+                        <MFXButton id="listAddBtn" fx:id="linkedListAddButton" buttonType="FLAT" onAction="#linkedListAddBtn" text="Add" >
+                            <graphic>
+                                <FontIcon iconLiteral="mdi2p-plus-thick" iconColor="white"/>
+                            </graphic>
+                        </MFXButton>
+                        <MFXButton id="listRemoveBtn" fx:id="linkedListRemoveButton" buttonType="FLAT" onAction="#linkedListRemoveBtn" text="Remove">
+                            <graphic>
+                                <FontIcon iconLiteral="mdi2m-minus-thick" iconColor="white"/>
+                            </graphic>
+                        </MFXButton>
+                    </HBox>
+                    <HBox spacing="20">
+                        <MFXButton id="listSearchBtn" fx:id="linkedListSearchButton"  buttonType="FLAT" rippleAnimateBackground="true"  onAction="#linkedListSearchBtn" text="Search">
+                            <graphic>
+                                <FontIcon iconLiteral="mdi2m-magnify" iconColor="white"/>
+                            </graphic>
+                        </MFXButton>
+                        <MFXButton id="listClearBtn" fx:id="linkedListClearButton" buttonType="FLAT" onAction="#linkedListClearBtn" text="Clear" >
+                            <graphic>
+                                <FontIcon iconLiteral="mdi2c-close" iconColor="white"/>
+                            </graphic>
+                        </MFXButton>
+                    </HBox>
+                </VBox>
+            </VBox>
             <VBox fx:id="operationPanelCard3" visible="false" spacing="20">
                 <Label id="setControlLabel" text="Controls" />
                 <MFXTextField id="setInpField" fx:id="setInpField" promptText="Enter Value" style="-fx-text-fill: #EC641C;-fx-font-size: 20"/>

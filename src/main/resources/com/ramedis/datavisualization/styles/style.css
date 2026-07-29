@@ -497,4 +497,11 @@
  -fx-text-fill: #2C00FA;
  -fx-font-size: 16
 }
+.linkedNode{
 
+    -fx-border-color:#ec641c;
+    -fx-border-width:2;
+    -fx-border-radius:8;
+    -fx-background-radius:8;
+    -fx-background-color:#202020;
+}

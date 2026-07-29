@@ -90,6 +90,18 @@ private MFXButton mapRemoveButton;
 @FXML
 private MFXButton mapClearButton;
 @FXML
+private VBox linkedListOperationPanelCard;
+@FXML
+private MFXTextField linkedListInpField;
+@FXML
+private MFXButton linkedListAddButton;
+@FXML
+private MFXButton linkedListRemoveButton;
+@FXML
+private MFXButton linkedListSearchButton;
+@FXML
+private MFXButton linkedListClearButton;
+@FXML
 private MFXButton logClearBtn;
   private String selectedKeyType;
   private String selectedValueType;
@@ -101,7 +113,7 @@ private MFXButton logClearBtn;
   private int capacity = 10;
   private boolean darkMode = true;
   private Map<String, List<String>> implement = new HashMap<>();
-
+  private LinkedList<String> linkedList = new LinkedList<>();
 
   public void initialize(){
 
@@ -126,7 +138,7 @@ private MFXButton logClearBtn;
   }
 
   @FXML
-  private void refreshVisualization(){
+  private void refreshArrayListVisualization(){
     if(valueLabels.size()<capacity){
 
       for(int i =valueLabels.size(); i< capacity; i++){
@@ -159,7 +171,7 @@ private MFXButton logClearBtn;
     }
   }
   @FXML
-  private void refreshVisualization2(){
+  private void refreshHashMapVisualization(){
     visualizationPanelCard.getChildren().clear();
     for(Map.Entry<Object, Object> entry:map.entrySet()) {
       Label mapLabel = new Label(entry.getKey() + " : " + entry.getValue());
@@ -173,7 +185,7 @@ private MFXButton logClearBtn;
   }
 
   @FXML
-  private void refreshVisualization3(){
+  private void refreshHashSetVisualization(){
     visualizationPanelCard.getChildren().clear();
     List<String> values = new ArrayList<>(set);
     for(int i=0; i<capacity; i++){
@@ -253,6 +265,7 @@ addLog(category + " Category is selected ");
         addLog("Configuring ArrayList UI");
         break;
       case "LinkedList":
+        configureLinkedListUI();
         addLog("Configuring LinkedList UI");
         break;
       case "HashSet":
@@ -277,7 +290,7 @@ addLog(category + " Category is selected ");
       capacity = Integer.parseInt(sizeField.getText());
       addLog("the size value is "+capacity);
       list.clear();
-      refreshVisualization();
+      refreshArrayListVisualization();
     }catch (NumberFormatException e){
       addErrorLog("Please Enter a valid Size");
     }
@@ -298,6 +311,19 @@ addLog(category + " Category is selected ");
 //    inpField.clear();
 //  }
   private void configureArrayListUI(){
+    operationPanelCard.setVisible(true);
+    operationPanelCard2.setVisible(false);
+    operationPanelCard3.setVisible(false);
+    dataTypeCmb.setVisible(true);
+    keyValueTypeCmb.setVisible(false);
+    visualizationPanelCard.getChildren().clear();
+    list.clear();
+    inpField.clear();
+    sizeField.clear();
+    capacity=0;
+  }
+
+  private void configureLinkedListUI(){
     operationPanelCard.setVisible(true);
     operationPanelCard2.setVisible(false);
     operationPanelCard3.setVisible(false);
@@ -412,7 +438,7 @@ addLog(category + " Category is selected ");
     }
     if(set.add(value)){
       addLog("Added : "+value);
-      refreshVisualization3();
+      refreshHashSetVisualization();
     }else {
       addErrorLog("Duplicate Element is not allowed");
       addLog("Here the duplicate element is : "+value);
@@ -424,7 +450,7 @@ addLog(category + " Category is selected ");
     String value = setInpField.getText();
     if(set.remove(value)){
       addLog("Removed : "+value);
-      refreshVisualization3();
+      refreshHashSetVisualization();
     }else {
       addErrorLog("Element not found");
     }
@@ -460,7 +486,7 @@ addLog(category + " Category is selected ");
       Object value = convertValue(valueText,selectedValueType);
       addLog(value+" is entered");
       map.put(key, value);
-      refreshVisualization2();
+      refreshHashMapVisualization();
       keyField.clear();
       valueField.clear();
     }catch (Exception e){
@@ -477,7 +503,7 @@ addLog(category + " Category is selected ");
       Object key = convertValue(keyText,selectedKeyType);
       if(map.containsKey(key)){
         map.remove(key);
-        refreshVisualization2();
+        refreshHashMapVisualization();
         addLog(key+" removed Successfully");
       }else {
         addErrorLog(key+" not found");
@@ -585,12 +611,18 @@ addLog(category + " Category is selected ");
       categoryCmb.clearSelection();
       implementCmb.clearSelection();
       sizeField.clear();
-      keyTypeCmb.clearSelection();
-      valueTypeCmb.clearSelection();
-      dataTypeCmb.clearSelection();
+//      keyTypeCmb.clearSelection();
+//      valueTypeCmb.clearSelection();
+//      dataTypeCmb.clearSelection();
       logEventsField.getChildren().clear();
       inpField.clear();
       visualizationPanelCard.getChildren().clear();
+      operationPanelCard.setVisible(false);
+      operationPanelCard2.setVisible(false);
+      operationPanelCard3.setVisible(false);
+      keyValueTypeCmb.setVisible(false);
+      dataTypeCmb.setVisible(false);
+
   }
 
   public void logClearBtn(ActionEvent actionEvent) {
@@ -611,18 +643,18 @@ addLog(category + " Category is selected ");
     if(list.size() == capacity){
       capacity = capacity+capacity/2;
       addLog("Array Capacity is increased by : "+capacity);
-      refreshVisualization();
+      refreshArrayListVisualization();
     }
     list.add(value);
     addLog("Added value : "+value+" and its Index is "+(list.size()-1));
-    refreshVisualization();
+    refreshArrayListVisualization();
     inpField.clear();
   }
 @FXML
   public void listRemoveBtn(ActionEvent actionEvent) {
   String value = inpField.getText();
   if(list.remove(value)){
-    refreshVisualization();
+    refreshArrayListVisualization();
     addLog(value +" is successfully removed");
   }else{
     addErrorLog("Value not found.");
@@ -683,4 +715,97 @@ addLog(category + " Category is selected ");
     logEventsField.getChildren().add(label);
   }
 
+  public void linkedListAddBtn(ActionEvent actionEvent) {
+    String value = linkedListInpField.getText();
+    if(!value.isEmpty()){
+      linkedList.add(value);
+      refreshLinkedList();
+    }
+    linkedListInpField.clear();
+  }
+
+  public void linkedListRemoveBtn(ActionEvent actionEvent) {
+  }
+
+  public void linkedListSearchBtn(ActionEvent actionEvent) {
+  }
+
+  public void linkedListClearBtn(ActionEvent actionEvent) {
+  }
+
+//  private void refreshLinkedList(){
+//
+//    visualizationPanelCard.getChildren().clear();
+//
+//    for(int i=0;i<linkedList.size();i++){
+//
+//      VBox node = new VBox();
+//
+//      Label value = new Label(linkedList.get(i));
+//      value.setPrefSize(80,40);
+//      value.getStyleClass().add("listValueCell");
+//
+//      Label next = new Label("Next");
+//      next.setPrefSize(80,25);
+//      next.getStyleClass().add("listIndexCell");
+//
+//      node.getChildren().addAll(value,next);
+//
+//      visualizationPanelCard.getChildren().add(node);
+//
+//      if(i!=linkedList.size()-1){
+//
+//        Label arrow=new Label("➜");
+//        arrow.setStyle("-fx-font-size:25;");
+//        visualizationPanelCard.getChildren().add(arrow);
+//
+//      }else{
+//
+//        Label nullNode=new Label("NULL");
+//        nullNode.setStyle("-fx-text-fill:red;-fx-font-size:18;");
+//        visualizationPanelCard.getChildren().add(nullNode);
+//
+//      }
+//
+//    }
+//
+//  }
+private void refreshLinkedList(){
+
+  visualizationPanelCard.getChildren().clear();
+
+  for(int i=0;i<linkedList.size();i++){
+
+    boolean last = (i==linkedList.size()-1);
+
+    HBox node = createNode(linkedList.get(i),last);
+
+    visualizationPanelCard.getChildren().add(node);
+  }
+}
+  private HBox createNode(String value, boolean lastNode) {
+
+    Label data = new Label(value);
+    data.setPrefSize(70,50);
+
+    Label next = new Label(lastNode ? "null" : "→");
+    next.setPrefSize(60,50);
+
+    data.setStyle("""
+            -fx-border-color:black;
+            -fx-alignment:center;
+            -fx-font-size:18;
+            """);
+
+    next.setStyle("""
+            -fx-border-color:black;
+            -fx-alignment:center;
+            -fx-font-size:18;
+            """);
+
+    HBox node = new HBox(data,next);
+    node.setSpacing(0);
+
+    return node;
+  }
 }
