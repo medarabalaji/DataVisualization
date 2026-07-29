@@ -733,79 +733,42 @@ addLog(category + " Category is selected ");
   public void linkedListClearBtn(ActionEvent actionEvent) {
   }
 
-//  private void refreshLinkedList(){
-//
-//    visualizationPanelCard.getChildren().clear();
-//
-//    for(int i=0;i<linkedList.size();i++){
-//
-//      VBox node = new VBox();
-//
-//      Label value = new Label(linkedList.get(i));
-//      value.setPrefSize(80,40);
-//      value.getStyleClass().add("listValueCell");
-//
-//      Label next = new Label("Next");
-//      next.setPrefSize(80,25);
-//      next.getStyleClass().add("listIndexCell");
-//
-//      node.getChildren().addAll(value,next);
-//
-//      visualizationPanelCard.getChildren().add(node);
-//
-//      if(i!=linkedList.size()-1){
-//
-//        Label arrow=new Label("➜");
-//        arrow.setStyle("-fx-font-size:25;");
-//        visualizationPanelCard.getChildren().add(arrow);
-//
-//      }else{
-//
-//        Label nullNode=new Label("NULL");
-//        nullNode.setStyle("-fx-text-fill:red;-fx-font-size:18;");
-//        visualizationPanelCard.getChildren().add(nullNode);
-//
-//      }
-//
-//    }
-//
-//  }
-private void refreshLinkedList(){
+  private void refreshLinkedList(){
 
-  visualizationPanelCard.getChildren().clear();
+    visualizationPanelCard.getChildren().clear();
 
-  for(int i=0;i<linkedList.size();i++){
+    for(int i=0;i<linkedList.size();i++){
 
-    boolean last = (i==linkedList.size()-1);
+      VBox node = new VBox();
 
-    HBox node = createNode(linkedList.get(i),last);
+      Label value = new Label(linkedList.get(i));
+      value.setPrefSize(80,40);
+      value.getStyleClass().add("listValueCell");
 
-    visualizationPanelCard.getChildren().add(node);
+      Label next = new Label("Next");
+      next.setPrefSize(80,25);
+      next.getStyleClass().add("listIndexCell");
+
+      node.getChildren().addAll(value,next);
+
+      visualizationPanelCard.getChildren().add(node);
+
+      if(i!=linkedList.size()-1){
+
+        Label arrow=new Label("➜");
+        arrow.setStyle("-fx-font-size:25;");
+        visualizationPanelCard.getChildren().add(arrow);
+
+      }else{
+
+        Label nullNode=new Label("NULL");
+        nullNode.setStyle("-fx-text-fill:red;-fx-font-size:18;");
+        visualizationPanelCard.getChildren().add(nullNode);
+
+      }
+
+    }
+
   }
-}
-  private HBox createNode(String value, boolean lastNode) {
 
-    Label data = new Label(value);
-    data.setPrefSize(70,50);
-
-    Label next = new Label(lastNode ? "null" : "→");
-    next.setPrefSize(60,50);
-
-    data.setStyle("""
-            -fx-border-color:black;
-            -fx-alignment:center;
-            -fx-font-size:18;
-            """);
-
-    next.setStyle("""
-            -fx-border-color:black;
-            -fx-alignment:center;
-            -fx-font-size:18;
-            """);
-
-    HBox node = new HBox(data,next);
-    node.setSpacing(0);
-
-    return node;
-  }
 }
