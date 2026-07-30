@@ -246,13 +246,15 @@
     -fx-padding: 20 0 0 110;
 }
 #arrayInpField{
-    -fx-background-color: transparent;
-    -fx-pref-width: 150;
-    -fx-pref-height: 20;
-    -fx-translate-y: -30;
-    -fx-translate-x: 80;
-    -fx-border-radius: 0;
-    -fx-text-alignment: center;
+     -fx-background-color: transparent;
+     -fx-pref-width: 150;
+     -fx-pref-height: 20;
+     -fx-translate-y: -30;
+     -fx-translate-x: 80;
+     -fx-text-fill: #020202;
+     -fx-border-radius: 0;
+     -fx-border-color: #777777;
+     -fx-text-alignment: center;
 }
 #arrayBtns{
     -fx-alignment: center;
@@ -268,18 +270,25 @@
 }
 
 #setInpField{
-    -fx-background-color: transparent;
-        -fx-pref-width: 150;
-        -fx-pref-height: 20;
-        -fx-translate-y: -30;
-        -fx-translate-x: 80;
-        -fx-border-radius: 0;
-        -fx-text-alignment: center;
+     -fx-background-color: transparent;
+     -fx-pref-width: 150;
+     -fx-pref-height: 20;
+     -fx-translate-y: -30;
+     -fx-translate-x: 80;
+     -fx-text-fill: #020202;
+     -fx-border-radius: 0;
+     -fx-border-color: #777777;
+     -fx-text-alignment: center;
 }
 #setBtns{
     -fx-alignment: center;
     -fx-translate-x: 40;
-        -fx-translate-y: -20;
+    -fx-translate-y: -20;
+}
+#LinkedListBtns{
+    -fx-alignment: center;
+    -fx-translate-x: 40;
+    -fx-translate-y: -20;
 }
 #mapControlLabel{
      -fx-font-size: 25;
@@ -295,7 +304,10 @@
         -fx-translate-y: -30;
         -fx-border-width: 0 0 1 0;
         -fx-border-radius: 0;
+        -fx-border-color: #777777;
         -fx-text-alignment: center;
+
+
 }
 #mapValueField{
 -fx-background-color: transparent;
@@ -304,6 +316,7 @@
         -fx-translate-y: -30;
         -fx-border-width: 0 0 1 0;
         -fx-border-radius: 0;
+        -fx-border-color: #777777;
         -fx-text-alignment: center;
 }
 #logClearBtn{
@@ -401,6 +414,50 @@
     -fx-text-fill: white;
         -fx-font-size: 18;
         -fx-cursor: hand;
+}
+#linkedListAddBtn{
+    -fx-pref-width: 120;
+    -fx-pref-height: 40;
+    -fx-text-fill: white;
+    -fx-font-size: 18;
+    -fx-cursor: hand;
+}
+
+#linkedListRemoveBtn{
+    -fx-pref-width: 120;
+    -fx-pref-height: 40;
+    -fx-text-fill: white;
+    -fx-font-size:18;
+    -fx-cursor: hand;
+}
+
+#linkedListSearchBtn{
+    -fx-pref-width: 120;
+    -fx-pref-height: 40;
+    -fx-text-fill: white;
+    -fx-font-size:18;
+    -fx-cursor: hand;
+}
+
+#linkedListClearBtn{
+    -fx-pref-width: 120;
+    -fx-pref-height: 40;
+    -fx-text-fill: white;
+    -fx-font-size:18;
+    -fx-cursor: hand;
+}
+
+#linkedListInpField{
+       -fx-background-color: transparent;
+           -fx-pref-width: 150;
+           -fx-pref-height: 20;
+           -fx-translate-y: -30;
+           -fx-translate-x: 80;
+           -fx-text-fill: #020202;
+           -fx-border-radius: 0;
+           -fx-border-color: #777777;
+           -fx-text-alignment: center;
+
 }
 #visualizationPanel{
     -fx-font-size: 30;
