@@ -562,3 +562,15 @@
     -fx-background-radius:8;
     -fx-background-color:#202020;
 }
+
+.currentNode{
+    -fx-background-color: gold;
+    -fx-text-fill: black;
+    -fx-background-radius: 10;
+}
+
+.foundNode{
+    -fx-background-color: #32CD32;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+}

@@ -5,6 +5,8 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -12,6 +14,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.util.*;
@@ -116,6 +119,7 @@ public class DataVisualizerController {
     private boolean darkMode = true;
     private Map<String, List<String>> implement = new HashMap<>();
     private LinkedList<String> linkedList = new LinkedList<>();
+    private final List<Label> linkedNodeLabels = new ArrayList<>();
 
     public void initialize() {
 
@@ -850,10 +854,50 @@ public class DataVisualizerController {
     }
 
     public void linkedListSearchBtn(ActionEvent actionEvent) {
+        String searchValue = linkedListInpField.getText().trim();
+
+        if(searchValue.isBlank()){
+            addErrorLog("Please Enter a value to search");
+        }
+
+        for(Label label:linkedNodeLabels){
+            label.getStyleClass().removeAll("currentNode","foundNode");
+        }
+        Timeline timeline = new Timeline();
+        for(int i=0; i<linkedList.size();i++){
+            final int index = i;
+
+            KeyFrame keyFrame = new KeyFrame(
+                    Duration.seconds((i+1)*0.7),
+                    e->{
+                        for (Label label:linkedNodeLabels){
+                            label.getStyleClass().remove("currentNode");
+                        }
+                        Label current = linkedNodeLabels.get(index);
+
+                        if(linkedList.get(index).equals(searchValue)){
+                            current.getStyleClass().remove("currentNode");
+                            current.getStyleClass().add("foundNode");
+                            addLog(searchValue +" found at index "+index);
+                            timeline.stop();
+                        }else {
+                            current.getStyleClass().add("currentNode");
+                        }
+                    }
+            );
+            timeline.getKeyFrames().add(keyFrame);
+        }
+        timeline.setOnFinished(e->{
+            if(!linkedList.contains(searchValue)){
+                addErrorLog(searchValue +" not found");
+            }
+        });
+        timeline.play();
     }
 
     public void linkedListClearBtn(ActionEvent actionEvent) {
         visualizationPanelCard.getChildren().clear();
+        linkedListInpField.clear();
         linkedList.clear();
     }
 
@@ -862,6 +906,7 @@ public class DataVisualizerController {
         visualizationPanelCard.getChildren().clear();
         visualizationPanelCard.setAlignment(Pos.CENTER);
         visualizationPanelCard.setSpacing(15);
+        linkedNodeLabels.clear();
         for (int i = 0; i < linkedList.size(); i++) {
 
             VBox node = new VBox();
@@ -870,7 +915,7 @@ public class DataVisualizerController {
             value.setPrefSize(100, 40);
             value.setAlignment(Pos.CENTER);
             value.getStyleClass().add("listValueCell");
-
+            linkedNodeLabels.add(value);
             Label next = new Label("Next");
             next.setPrefSize(100, 25);
             next.getStyleClass().add("listIndexCell");
