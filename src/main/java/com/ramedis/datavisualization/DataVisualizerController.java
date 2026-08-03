@@ -5,8 +5,7 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import io.github.palexdev.materialfx.controls.MFXTextField;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -390,6 +389,10 @@ public class DataVisualizerController {
 //    }
 //    inpField.clear();
 //  }
+
+
+
+
     private void configureArrayListUI() {
         operationPanelCard.setVisible(true);
         linkedListOperationPanelCard.setVisible(false);
@@ -661,6 +664,7 @@ public class DataVisualizerController {
 
     private void applyLightMode() {
         totalScreen.setStyle("-fx-background-color: white");
+
         resetBtn.setStyle("-fx-text-fill: #000000; -fx-background-color: #aaaaaa;");
         themeBtn.setStyle("-fx-text-fill: #000000;-fx-background-color: #aaaaaa; ");
         applyBtn.setStyle("-fx-text-fill: #000000;-fx-background-color: #aaaaaa; ");
@@ -751,7 +755,7 @@ public class DataVisualizerController {
         if (list.size() == capacity) {
             capacity = capacity + capacity / 2;
             addLog("Array Capacity is increased by : " + capacity);
-            refreshArrayListVisualization();
+//            refreshArrayListVisualization();
         }
         list.add(value);
         addLog("Added value : " + value + " and its Index is " + (list.size() - 1));
@@ -851,8 +855,66 @@ public class DataVisualizerController {
     }
 
     public void linkedListRemoveBtn(ActionEvent actionEvent) {
-    }
 
+        String value = linkedListInpField.getText().trim();
+        if(value.isEmpty()){
+            addErrorLog("Please Enter a value to remove");
+            return;
+        }
+        if(linkedList.isEmpty()){
+            addErrorLog("Linked list is empty.");
+            return;
+        }
+        boolean removed = linkedList.remove(value);
+        if(removed){
+            refreshLinkedList();
+            linkedListInpField.clear();
+            addLog(value+" removed successfully.");
+        }else {
+            addErrorLog(value+" not found.");
+        }
+    }
+//        String value = linkedListInpField.getText().trim();
+//
+//        if (value.isEmpty()) {
+//            addErrorLog("Enter value!");
+//            return;
+//        }
+//
+//        int index = linkedList.indexOf(value);
+//
+//        if (index == -1) {
+//            addErrorLog("Value not found!");
+//            return;
+//        }
+//
+//        animateRemove(index);
+//}
+//    private void animateRemove(int index) {
+//
+//        VBox node = linkedNodeLabels.get(index);
+//
+//        // Fade animation
+//        FadeTransition fade = new FadeTransition(Duration.seconds(0.5), node);
+//        fade.setFromValue(1);
+//        fade.setToValue(0);
+//
+//        // Move upward animation
+//        TranslateTransition move = new TranslateTransition(Duration.seconds(0.5), node);
+//        move.setByY(-40);
+//
+//        ParallelTransition animation = new ParallelTransition(fade, move);
+//
+//        animation.setOnFinished(e -> {
+//
+//            linkedList.remove(index);
+//
+//            refreshLinkedList();
+//
+//        });
+//
+//        animation.play();
+//    }
     public void linkedListSearchBtn(ActionEvent actionEvent) {
         String searchValue = linkedListInpField.getText().trim();
 

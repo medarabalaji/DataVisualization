@@ -309,6 +309,11 @@
 
 
 }
+#resetBtn{
+-fx-text-fill: #000000;
+-fx-background-color: #aaaaaa;
+}
+
 #mapValueField{
 -fx-background-color: transparent;
         -fx-pref-width: 70;
@@ -536,7 +541,7 @@
 }
 .setValueCell{
 -fx-font-size: 20;
--fx-text-fill: #2C00FA;
+-fx-text-fill: red;
  -fx-border-color: #2C00FA;
  -fx-border-radius: 10;
   -fx-border-style: dotted;
