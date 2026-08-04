@@ -106,6 +106,18 @@ public class DataVisualizerController {
     @FXML
     private MFXButton linkedListClearButton;
     @FXML
+    private VBox treeSetOperationPanelCard;
+    @FXML
+    private MFXTextField treeSetInpField;
+    @FXML
+    private MFXButton treeSetAddButton;
+    @FXML
+    private MFXButton treeSetRemoveButton;
+    @FXML
+    private MFXButton treeSetSearchButton;
+    @FXML
+    private MFXButton treeSetClearButton;
+    @FXML
     private MFXButton logClearBtn;
     private String selectedKeyType;
     private String selectedValueType;
@@ -113,12 +125,13 @@ public class DataVisualizerController {
     private ArrayList<String> list = new ArrayList<>();
     private ArrayList<Label> valueLabels = new ArrayList<>();
     private Map<Object, Object> map = new HashMap<>();
-    private HashSet<String> set = new HashSet<>();
+    private HashSet<String> hashSet = new HashSet<>();
     private int capacity = 10;
     private boolean darkMode = true;
     private Map<String, List<String>> implement = new HashMap<>();
     private LinkedList<String> linkedList = new LinkedList<>();
     private final List<Label> linkedNodeLabels = new ArrayList<>();
+    private TreeSet<Object> treeSet= new TreeSet<>();
 
     public void initialize() {
 
@@ -194,7 +207,7 @@ public class DataVisualizerController {
     @FXML
     private void refreshHashSetVisualization() {
         visualizationPanelCard.getChildren().clear();
-        List<String> values = new ArrayList<>(set);
+        List<String> values = new ArrayList<>(hashSet);
         for (int i = 0; i < capacity; i++) {
             Label indexCell = new Label(String.valueOf(i));
             indexCell.setAlignment(Pos.CENTER);
@@ -207,6 +220,30 @@ public class DataVisualizerController {
 
             if (i < values.size()) {
                 valueCell.setText(values.get(i));
+            }
+
+            VBox box = new VBox(5);
+            box.setAlignment(Pos.CENTER);
+            box.getChildren().addAll(indexCell, valueCell);
+            visualizationPanelCard.getChildren().add(box);
+        }
+    }
+
+    private void refreshTreeSetVisualization(){
+        visualizationPanelCard.getChildren().clear();
+        List<Object> value = new ArrayList<>(treeSet);
+        for (int i = 0; i < capacity; i++) {
+            Label indexCell = new Label(String.valueOf(i));
+            indexCell.setAlignment(Pos.CENTER);
+            indexCell.getStyleClass().add("setIndexCell");
+
+            Label valueCell = new Label();
+            valueCell.setPrefSize(100, 40);
+            valueCell.setAlignment(Pos.CENTER);
+            valueCell.getStyleClass().add("setValueCell");
+
+            if (i < value.size()) {
+                valueCell.setText(value.get(i).toString());
             }
 
             VBox box = new VBox(5);
@@ -281,6 +318,7 @@ public class DataVisualizerController {
                 addLog("Configuring HashSet UI");
                 break;
             case "TreeSet":
+                configureTreeSetUI();
                 addLog("Configuring TreeSet UI");
                 break;
             case "HashMap":
@@ -329,7 +367,7 @@ public class DataVisualizerController {
             case "HashSet":
                 try {
                     capacity = Integer.parseInt(sizeField.getText());
-                    set.clear();
+                    hashSet.clear();
                     visualizationPanelCard.getChildren().clear();
 
                     refreshHashSetVisualization();
@@ -340,7 +378,17 @@ public class DataVisualizerController {
                     addErrorLog("Please enter a valid capacity.");
                 }
                 break;
-
+            case "TreeSet":
+                try {
+                    capacity=Integer.parseInt(sizeField.getText());
+                    treeSet.clear();
+                    visualizationPanelCard.getChildren().clear();
+                    refreshTreeSetVisualization();
+                    addLog("TreeSet visualization initilized with capacity of "+capacity);
+                }catch (NumberFormatException e){
+                    addErrorLog("Please enter a valid capacity");
+                }
+                break;
             case "HashMap":
 
                 try {
@@ -397,6 +445,7 @@ public class DataVisualizerController {
         operationPanelCard.setVisible(true);
         linkedListOperationPanelCard.setVisible(false);
         operationPanelCard2.setVisible(false);
+        treeSetOperationPanelCard.setVisible(false);
         operationPanelCard3.setVisible(false);
         dataTypeCmb.setVisible(true);
         keyValueTypeCmb.setVisible(false);
@@ -415,6 +464,7 @@ public class DataVisualizerController {
         operationPanelCard.setVisible(false);
         linkedListOperationPanelCard.setVisible(true);
         operationPanelCard2.setVisible(false);
+        treeSetOperationPanelCard.setVisible(false);
         operationPanelCard3.setVisible(false);
         dataTypeCmb.setVisible(true);
         keyValueTypeCmb.setVisible(false);
@@ -431,6 +481,7 @@ public class DataVisualizerController {
     private void configureMapListUI() {
         operationPanelCard.setVisible(false);
         linkedListOperationPanelCard.setVisible(false);
+        treeSetOperationPanelCard.setVisible(false);
         operationPanelCard2.setVisible(true);
         operationPanelCard3.setVisible(false);
         capacityLabel.setVisible(true);
@@ -446,6 +497,7 @@ public class DataVisualizerController {
         linkedListOperationPanelCard.setVisible(false);
         operationPanelCard2.setVisible(false);
         operationPanelCard3.setVisible(true);
+        treeSetOperationPanelCard.setVisible(false);
         dataTypeCmb.setVisible(true);
         dataTypeCmb.clear();
         capacityLabel.setVisible(true);
@@ -456,6 +508,24 @@ public class DataVisualizerController {
         inpField.clear();
         sizeField.clear();
         capacity = 0;
+    }
+
+    private void configureTreeSetUI(){
+        operationPanelCard.setVisible(false);
+        linkedListOperationPanelCard.setVisible(false);
+        operationPanelCard2.setVisible(false);
+        operationPanelCard3.setVisible(false);
+        treeSetOperationPanelCard.setVisible(true);
+        dataTypeCmb.setVisible(true);
+        dataTypeCmb.clear();
+        capacityLabel.setVisible(true);
+        sizeField.setVisible(true);
+        keyValueTypeCmb.setVisible(false);
+        visualizationPanelCard.getChildren().clear();
+        list.clear();
+        inpField.clear();
+        sizeField.clear();
+        capacity=0;
     }
 
     //@FXML
@@ -530,11 +600,11 @@ public class DataVisualizerController {
         if (value.isBlank()) {
             return;
         }
-        if (set.size() == capacity) {
+        if (hashSet.size() == capacity) {
             capacity = capacity + capacity / 2;
             addLog("Set capacity is increased by : " + capacity);
         }
-        if (set.add(value)) {
+        if (hashSet.add(value)) {
             addLog("Added : " + value);
             refreshHashSetVisualization();
         } else {
@@ -546,7 +616,7 @@ public class DataVisualizerController {
 
     public void removeSetBtn(ActionEvent actionEvent) {
         String value = setInpField.getText();
-        if (set.remove(value)) {
+        if (hashSet.remove(value)) {
             addLog("Removed : " + value);
             refreshHashSetVisualization();
         } else {
@@ -557,7 +627,7 @@ public class DataVisualizerController {
 
     public void searchSetBtn(ActionEvent actionEvent) {
         String value = setInpField.getText();
-        if (set.contains(value)) {
+        if (hashSet.contains(value)) {
             addLog("Found : " + value);
         } else {
             addErrorLog(value + " not found");
@@ -567,7 +637,7 @@ public class DataVisualizerController {
 
     public void clearSetBtn(ActionEvent actionEvent) {
         visualizationPanelCard.getChildren().clear();
-        set.clear();
+        hashSet.clear();
         addLog("cleared");
     }
 
@@ -664,7 +734,8 @@ public class DataVisualizerController {
 
     private void applyLightMode() {
         totalScreen.setStyle("-fx-background-color: white");
-
+        categoryCmb.setStyle("-fx-text-fill: #000000; -fx-background-color: #aaaaaa;-fx-border-color: #aaaaaa");
+        implementCmb.setStyle("-fx-text-fill: #000000; -fx-background-color: #aaaaaa;-fx-border-color: #aaaaaa");
         resetBtn.setStyle("-fx-text-fill: #000000; -fx-background-color: #aaaaaa;");
         themeBtn.setStyle("-fx-text-fill: #000000;-fx-background-color: #aaaaaa; ");
         applyBtn.setStyle("-fx-text-fill: #000000;-fx-background-color: #aaaaaa; ");
@@ -689,6 +760,8 @@ public class DataVisualizerController {
 
     private void applyDarkMode() {
         totalScreen.setStyle("-fx-background-color: #000000; ");
+        categoryCmb.setStyle("-fx-text-fill: #ffffff; -fx-background-color: #2a2a2a;-fx-border-color: #2a2a2a;");
+        implementCmb.setStyle("-fx-text-fill: #ffffff; -fx-background-color: #2a2a2a;-fx-border-color: #2a2a2a;");
         themeBtn.setStyle("-fx-text-fill: #ffffff; -fx-background-color: #2a2a2a");
         applyBtn.setStyle("-fx-text-fill: #ffffff; -fx-background-color: #2a2a2a");
         resetBtn.setStyle("-fx-text-fill: #ffffff;-fx-background-color: #2a2a2a");
@@ -730,7 +803,7 @@ public class DataVisualizerController {
         dataTypeCmb.setVisible(false);
         list.clear();
         linkedList.clear();
-        set.clear();
+        hashSet.clear();
         map.clear();
         valueLabels.clear();
         capacity = 0;
@@ -1008,4 +1081,37 @@ public class DataVisualizerController {
 
     }
 
+    public void treeSetAddBtn(ActionEvent actionEvent) {
+        String value = treeSetInpField.getText();
+        if(!isValidDataType(value)){
+                addErrorLog("Please Enter a " + selectedDataType + " value.");
+                return;
+            }
+            if (value.isBlank()) {
+                return;
+            }
+            if (treeSet.size() == capacity) {
+                capacity = capacity + capacity / 2;
+                addLog("Set capacity is increased by : " + capacity);
+            }
+            Object obj = convertValue(value,selectedDataType);
+            if (treeSet.add(obj)) {
+                addLog("Added : " + obj);
+               refreshTreeSetVisualization();
+            } else {
+                addErrorLog("Duplicate Element is not allowed");
+                addLog("Here the duplicate element is : " + value);
+            }
+            treeSetInpField.clear();
+
+    }
+
+    public void treeSetRemoveBtn(ActionEvent actionEvent) {
+    }
+
+    public void treeSetSearchBtn(ActionEvent actionEvent) {
+    }
+
+    public void treeSetClearBtn(ActionEvent actionEvent) {
+    }
 }

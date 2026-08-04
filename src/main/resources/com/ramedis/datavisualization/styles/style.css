@@ -127,7 +127,7 @@
         /*-fx-effect: dropshadow(one-pass-box, rgba(0,0,255,0), 10, 0, 0, 5);*/
    }
 .mfx-combo-box .caret .mfx-ripple-generator {
--mfx-alignment: center;
+    -mfx-alignment: center;
   -mfx-ripple-color: #ffffff;
   -mfx-ripple-radius: 24;
 }
@@ -176,7 +176,7 @@
 /* Selected Cell */
 .mfx-combo-box .combo-popup .virtual-flow .mfx-combo-box-cell:selected {
 
-    -fx-background-color: #aaaaaa;
+    -fx-background-color:transparent;
     -fx-background-radius: 10;
     -fx-border-radius: 30;
 }
@@ -311,7 +311,7 @@
 }
 #resetBtn{
 -fx-text-fill: #000000;
--fx-background-color: #aaaaaa;
+-fx-background-color: #020202;
 }
 
 #mapValueField{
@@ -501,6 +501,7 @@
     -fx-text-fill: white;
     -fx-font-size: 18;
     -fx-cursor: hand;
+    -fx-background-color: #020202;
 }
 
 .card{

@@ -179,6 +179,39 @@
                 </VBox>
 
             </VBox>
+
+            <VBox fx:id="treeSetOperationPanelCard" visible="false" spacing="20">
+                <Label id="setControlLabel" text="Controls" />
+                <MFXTextField id="setInpField" fx:id="treeSetInpField" promptText="Enter Value" style="-fx-text-fill: #EC641C;-fx-font-size: 20"/>
+                <VBox spacing="20" id="setBtns">
+                    <HBox spacing="20">
+                        <MFXButton id="setAddBtn" fx:id="treeSetAddButton" buttonType="FLAT" onAction="#treeSetAddBtn" text="Add">
+                            <graphic>
+                                <FontIcon iconLiteral="mdi2p-plus-thick" iconColor="white"/>
+                            </graphic>
+                        </MFXButton>
+                        <MFXButton id="setRemoveBtn" fx:id="treeSetRemoveButton" buttonType="FLAT" onAction="#treeSetRemoveBtn" text="Remove">
+                            <graphic>
+                                <FontIcon iconLiteral="mdi2m-minus-thick" iconColor="white"/>
+                            </graphic>
+                        </MFXButton>
+                    </HBox>
+                    <HBox spacing="20">
+                        <MFXButton id="setSearchBtn" fx:id="treeSetSearchButton" buttonType="FLAT" onAction="#treeSetSearchBtn" text="Search" >
+                            <graphic>
+                                <FontIcon iconLiteral="mdi2m-magnify" iconColor="white"/>
+                            </graphic>
+                        </MFXButton>
+                        <MFXButton id="setClearBtn" fx:id="treeSetClearButton" buttonType="FLAT" onAction="#treeSetClearBtn" text="Clear" >
+                            <graphic>
+                                <FontIcon iconLiteral="mdi2c-close" iconColor="white"/>
+                            </graphic>
+                        </MFXButton>
+                    </HBox>
+                </VBox>
+
+            </VBox>
+
             <VBox fx:id="operationPanelCard2" spacing="20" visible="false">
 
                 <Label id="mapControlLabel" text="Controls" />
