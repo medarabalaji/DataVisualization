@@ -132,7 +132,7 @@ public class DataVisualizerController {
     private LinkedList<String> linkedList = new LinkedList<>();
     private final List<Label> linkedNodeLabels = new ArrayList<>();
     private TreeSet<Object> treeSet= new TreeSet<>();
-
+    private Object searchedValue = null;
     public void initialize() {
 
         implement.put("List", List.of("ArrayList", "LinkedList"));
@@ -244,6 +244,9 @@ public class DataVisualizerController {
 
             if (i < value.size()) {
                 valueCell.setText(value.get(i).toString());
+                if(searchedValue != null && value.get(i).equals(searchedValue)){
+                    valueCell.getStyleClass().add("listValueLabel");
+                };
             }
 
             VBox box = new VBox(5);
@@ -1110,6 +1113,22 @@ public class DataVisualizerController {
     }
 
     public void treeSetSearchBtn(ActionEvent actionEvent) {
+        String value = treeSetInpField.getText().trim();
+        if(value.isBlank()){
+            addErrorLog("Please Enter a value");
+            return;
+        }
+        Object searchValue = convertValue(value,selectedDataType);
+        if(treeSet.contains(searchValue)){
+            searchedValue = searchValue;
+            refreshTreeSetVisualization();
+            addLog(searchValue+" is found");
+        }else {
+            searchedValue=null;
+            refreshTreeSetVisualization();
+            addErrorLog(searchValue+" is not found.");
+        }
+        treeSetInpField.clear();
     }
 
     public void treeSetClearBtn(ActionEvent actionEvent) {
