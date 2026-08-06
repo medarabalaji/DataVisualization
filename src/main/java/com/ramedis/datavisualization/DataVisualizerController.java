@@ -802,6 +802,7 @@ public class DataVisualizerController {
         operationPanelCard2.setVisible(false);
         operationPanelCard3.setVisible(false);
         linkedListOperationPanelCard.setVisible(false);
+        treeSetOperationPanelCard.setVisible(false);
         keyValueTypeCmb.setVisible(false);
         dataTypeCmb.setVisible(false);
         list.clear();
@@ -1110,6 +1111,47 @@ public class DataVisualizerController {
     }
 
     public void treeSetRemoveBtn(ActionEvent actionEvent) {
+
+
+            String value = treeSetInpField.getText().trim();
+
+            if (value.isBlank()) {
+                addErrorLog("Please Enter a value.");
+                return;
+            }
+
+            if (!isValidDataType(value)) {
+                addErrorLog("Please Enter a " + selectedDataType + " value.");
+                return;
+            }
+
+            try {
+
+                Object removeValue = convertValue(value, selectedDataType);
+
+                if (treeSet.remove(removeValue)) {
+
+                    addLog("Removed : " + removeValue);
+
+                    // Search highlight use chestunte clear cheyyi
+                    searchedValue = null;
+
+                    refreshTreeSetVisualization();
+
+                } else {
+
+                    addErrorLog(removeValue + " not found.");
+
+                }
+
+            } catch (Exception e) {
+
+                addErrorLog("Invalid input.");
+
+            }
+
+            treeSetInpField.clear();
+
     }
 
     public void treeSetSearchBtn(ActionEvent actionEvent) {
