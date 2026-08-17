@@ -5,6 +5,7 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.mfxcore.base.beans.range.IntegerRange;
 import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -122,19 +123,42 @@ public class DataVisualizerController {
     private String selectedKeyType;
     private String selectedValueType;
     private String selectedDataType;
-    private ArrayList<String> list = new ArrayList<>();
-    private ArrayList<Label> valueLabels = new ArrayList<>();
-    private Map<Object, Object> map = new HashMap<>();
-    private HashSet<String> hashSet = new HashSet<>();
+//    private ArrayList<String> list = new ArrayList<>();
+    private ArrayListModel<String> arrayListModel;
+    private LinkedListModel<String> linkedListModel;
+    private HashSetModel<String> hashSetModel;
+    private HashMapModel<Object, Object> hashMapModel;
+    private TreeSetModel<String> treeSetStringModel;
+    private TreeSetModel<Integer> treeSetIntegerModel;
+
+    private TreeSetModel<String> getStringTreeSet() {
+        return treeSetStringModel;
+    }
+
+    private TreeSetModel<Integer> getIntegerTreeSet() {
+        return treeSetIntegerModel;
+    }
+
+    private final ArrayList<Label> valueLabels = new ArrayList<>();
+//    private Map<Object, Object> map = new HashMap<>();
+//    private HashSet<String> hashSet = new HashSet<>();
     private int capacity = 10;
     private boolean darkMode = true;
     private Map<String, List<String>> implement = new HashMap<>();
-    private LinkedList<String> linkedList = new LinkedList<>();
+//    private LinkedList<String> linkedList = new LinkedList<>();
     private final List<Label> linkedNodeLabels = new ArrayList<>();
-    private TreeSet<Object> treeSet= new TreeSet<>();
+//    private TreeSet<Object> treeSet= new TreeSet<>();
     private Object searchedValue = null;
+
+
     public void initialize() {
 
+        arrayListModel=new ArrayListModel<>();
+        linkedListModel = new LinkedListModel<>();
+        hashSetModel = new HashSetModel<>();
+        hashMapModel = new HashMapModel<>();
+        treeSetStringModel = new TreeSetModel<>();
+        treeSetIntegerModel = new TreeSetModel<>();
         implement.put("List", List.of("ArrayList", "LinkedList"));
         implement.put("Set", List.of("HashSet", "TreeSet"));
         implement.put("Map", List.of("HashMap", "TreeMap"));
@@ -158,8 +182,8 @@ public class DataVisualizerController {
 
     @FXML
     private void refreshArrayListVisualization() {
-        if (valueLabels.size() < capacity) {
 
+        if (valueLabels.size() < capacity) {
             for (int i = valueLabels.size(); i < capacity; i++) {
                 Label indexCell = new Label(String.valueOf(i));
                 indexCell.setAlignment(Pos.CENTER);
@@ -180,9 +204,9 @@ public class DataVisualizerController {
             }
         }
         for (int i = 0; i < capacity; i++) {
-            valueLabels.get(i).getStyleClass().remove("listValueLabel");
-            if (i < list.size()) {
-                valueLabels.get(i).setText(list.get(i));
+//            valueLabels.get(i).getStyleClass().remove("listValueLabel");
+            if (i < arrayListModel.size()) {
+                valueLabels.get(i).setText(arrayListModel.get(i).toString());
 
             } else {
                 valueLabels.get(i).setText("");
@@ -193,7 +217,7 @@ public class DataVisualizerController {
     @FXML
     private void refreshHashMapVisualization() {
         visualizationPanelCard.getChildren().clear();
-        for (Map.Entry<Object, Object> entry : map.entrySet()) {
+        for (Map.Entry<Object, Object> entry : hashMapModel.getValues().entrySet()) {
             Label mapLabel = new Label(entry.getKey() + " : " + entry.getValue());
             mapLabel.setTextFill(Color.BLUE);
             mapLabel.setPrefSize(250, 40);
@@ -207,7 +231,7 @@ public class DataVisualizerController {
     @FXML
     private void refreshHashSetVisualization() {
         visualizationPanelCard.getChildren().clear();
-        List<String> values = new ArrayList<>(hashSet);
+        List<String> values = new ArrayList<>(hashSetModel.getValues());
         for (int i = 0; i < capacity; i++) {
             Label indexCell = new Label(String.valueOf(i));
             indexCell.setAlignment(Pos.CENTER);
@@ -231,7 +255,15 @@ public class DataVisualizerController {
 
     private void refreshTreeSetVisualization(){
         visualizationPanelCard.getChildren().clear();
-        List<Object> value = new ArrayList<>(treeSet);
+        List<?> values;
+        if ("Integer".equals(selectedDataType)) {
+
+            values = new ArrayList<>(treeSetIntegerModel.getValues());
+
+        } else {
+
+            values = new ArrayList<>(treeSetStringModel.getValues());
+        }
         for (int i = 0; i < capacity; i++) {
             Label indexCell = new Label(String.valueOf(i));
             indexCell.setAlignment(Pos.CENTER);
@@ -242,9 +274,9 @@ public class DataVisualizerController {
             valueCell.setAlignment(Pos.CENTER);
             valueCell.getStyleClass().add("setValueCell");
 
-            if (i < value.size()) {
-                valueCell.setText(value.get(i).toString());
-                if(searchedValue != null && value.get(i).equals(searchedValue)){
+            if (i < values.size()) {
+                valueCell.setText(values.get(i).toString());
+                if(searchedValue != null && values.get(i).equals(searchedValue)){
                     valueCell.getStyleClass().add("listValueLabel");
                 };
             }
@@ -345,7 +377,7 @@ public class DataVisualizerController {
             case "ArrayList":
                 try {
                     capacity = Integer.parseInt(sizeField.getText());
-                    list.clear();
+                    arrayListModel.clear();
                     valueLabels.clear();
                     visualizationPanelCard.getChildren().clear();
                     refreshArrayListVisualization();
@@ -361,7 +393,7 @@ public class DataVisualizerController {
                     return;
                 }
 
-                linkedList.clear();
+                linkedListModel.clear();
                 visualizationPanelCard.getChildren().clear();
                 refreshLinkedList();
                 addLog("Linkedlist visualization appeared");
@@ -370,7 +402,7 @@ public class DataVisualizerController {
             case "HashSet":
                 try {
                     capacity = Integer.parseInt(sizeField.getText());
-                    hashSet.clear();
+                    hashSetModel.clear();
                     visualizationPanelCard.getChildren().clear();
 
                     refreshHashSetVisualization();
@@ -384,7 +416,7 @@ public class DataVisualizerController {
             case "TreeSet":
                 try {
                     capacity=Integer.parseInt(sizeField.getText());
-                    treeSet.clear();
+                    treeSetIntegerModel.clear();
                     visualizationPanelCard.getChildren().clear();
                     refreshTreeSetVisualization();
                     addLog("TreeSet visualization initilized with capacity of "+capacity);
@@ -397,7 +429,7 @@ public class DataVisualizerController {
                 try {
                     capacity = Integer.parseInt(sizeField.getText());
 
-                    map.clear();
+                    hashMapModel.clear();
                     visualizationPanelCard.getChildren().clear();
 
                     refreshHashMapVisualization();
@@ -456,7 +488,7 @@ public class DataVisualizerController {
         capacityLabel.setVisible(true);
         sizeField.setVisible(true);
         dataTypeCmb.clear();
-        list.clear();
+        arrayListModel.clear();
         inpField.clear();
         sizeField.clear();
         capacity = 0;
@@ -475,7 +507,7 @@ public class DataVisualizerController {
         capacityLabel.setVisible(false);
         sizeField.setVisible(false);
         dataTypeCmb.clear();
-        linkedList.clear();
+        linkedListModel.clear();
         inpField.clear();
         sizeField.clear();
         capacity = 0;
@@ -507,7 +539,7 @@ public class DataVisualizerController {
         sizeField.setVisible(true);
         keyValueTypeCmb.setVisible(false);
         visualizationPanelCard.getChildren().clear();
-        list.clear();
+        arrayListModel.clear();
         inpField.clear();
         sizeField.clear();
         capacity = 0;
@@ -525,7 +557,7 @@ public class DataVisualizerController {
         sizeField.setVisible(true);
         keyValueTypeCmb.setVisible(false);
         visualizationPanelCard.getChildren().clear();
-        list.clear();
+        arrayListModel.clear();
         inpField.clear();
         sizeField.clear();
         capacity=0;
@@ -595,19 +627,21 @@ public class DataVisualizerController {
 
 
     public void onSetAdd(ActionEvent actionEvent) {
-        String value = setInpField.getText();
+        String value = setInpField.getText().trim();
         if (!isValidDataType(value)) {
             addErrorLog("Please Enter a " + selectedDataType + " value.");
             return;
         }
         if (value.isBlank()) {
+            addErrorLog("Please Enter a Value.");
             return;
         }
-        if (hashSet.size() == capacity) {
-            capacity = capacity + capacity / 2;
+        if (hashSetModel.size() >= capacity) {
+            capacity = capacity + Math.max(1, capacity / 2);
             addLog("Set capacity is increased by : " + capacity);
+            refreshHashSetVisualization();
         }
-        if (hashSet.add(value)) {
+        if (hashSetModel.add(value)) {
             addLog("Added : " + value);
             refreshHashSetVisualization();
         } else {
@@ -619,7 +653,7 @@ public class DataVisualizerController {
 
     public void removeSetBtn(ActionEvent actionEvent) {
         String value = setInpField.getText();
-        if (hashSet.remove(value)) {
+        if (hashSetModel.remove(value)) {
             addLog("Removed : " + value);
             refreshHashSetVisualization();
         } else {
@@ -630,7 +664,7 @@ public class DataVisualizerController {
 
     public void searchSetBtn(ActionEvent actionEvent) {
         String value = setInpField.getText();
-        if (hashSet.contains(value)) {
+        if (hashSetModel.contains(value)) {
             addLog("Found : " + value);
         } else {
             addErrorLog(value + " not found");
@@ -640,13 +674,13 @@ public class DataVisualizerController {
 
     public void clearSetBtn(ActionEvent actionEvent) {
         visualizationPanelCard.getChildren().clear();
-        hashSet.clear();
-        addLog("cleared");
+        hashSetModel.clear();
+        addLog("Hashset cleared");
     }
 
     public void putBtn(ActionEvent actionEvent) {
-        String keyText = keyField.getText();
-        String valueText = valueField.getText();
+        String keyText = keyField.getText().trim();
+        String valueText = valueField.getText().trim();
         if (keyText.isBlank() || valueText.isBlank()) {
             addErrorLog("Please Enter both key and value");
             return;
@@ -656,7 +690,8 @@ public class DataVisualizerController {
             addLog(key + " is entered");
             Object value = convertValue(valueText, selectedValueType);
             addLog(value + " is entered");
-            map.put(key, value);
+            hashMapModel.put(key, value);
+            addLog(key+" : "+value+" added.");
             refreshHashMapVisualization();
             keyField.clear();
             valueField.clear();
@@ -672,8 +707,8 @@ public class DataVisualizerController {
         }
         try {
             Object key = convertValue(keyText, selectedKeyType);
-            if (map.containsKey(key)) {
-                map.remove(key);
+            if (hashMapModel.containsKey(key)) {
+                hashMapModel.remove(key);
                 refreshHashMapVisualization();
                 addLog(key + " removed Successfully");
             } else {
@@ -693,8 +728,8 @@ public class DataVisualizerController {
         }
         try {
             Object key = convertValue(keyText, selectedKeyType);
-            if (map.containsKey(key)) {
-                Object value = map.get(key);
+            if (hashMapModel.containsKey(key)) {
+                Object value = hashMapModel.get(key);
                 addLog("Key is " + key + " and value is " + value);
             } else {
                 addErrorLog("Key not found");
@@ -707,7 +742,8 @@ public class DataVisualizerController {
 
     public void mapClearBtn(ActionEvent actionEvent) {
         visualizationPanelCard.getChildren().clear();
-        map.clear();
+        hashMapModel.clear();
+        addLog("HashMap cleared.");
     }
 
 
@@ -805,10 +841,10 @@ public class DataVisualizerController {
         treeSetOperationPanelCard.setVisible(false);
         keyValueTypeCmb.setVisible(false);
         dataTypeCmb.setVisible(false);
-        list.clear();
-        linkedList.clear();
-        hashSet.clear();
-        map.clear();
+        arrayListModel.clear();
+        linkedListModel.clear();
+        hashSetModel.clear();
+        hashMapModel.clear();
         valueLabels.clear();
         capacity = 0;
     }
@@ -829,13 +865,13 @@ public class DataVisualizerController {
         if (value.isBlank()) {
             return;
         }
-        if (list.size() == capacity) {
+        if (arrayListModel.size() == capacity) {
             capacity = capacity + capacity / 2;
             addLog("Array Capacity is increased by : " + capacity);
 //            refreshArrayListVisualization();
         }
-        list.add(value);
-        addLog("Added value : " + value + " and its Index is " + (list.size() - 1));
+        arrayListModel.add(value);
+        addLog("Added value : " + value + " and its Index is " + (arrayListModel.size() - 1));
         refreshArrayListVisualization();
         inpField.clear();
     }
@@ -843,9 +879,12 @@ public class DataVisualizerController {
     @FXML
     public void listRemoveBtn(ActionEvent actionEvent) {
         String value = inpField.getText();
-        if (list.remove(value)) {
-            refreshArrayListVisualization();
+        if(value.isBlank()){
+            return;
+        }
+        if (arrayListModel.remove(value)) {
             addLog(value + " is successfully removed");
+            refreshArrayListVisualization();
         } else {
             addErrorLog("Value not found.");
         }
@@ -865,8 +904,8 @@ public class DataVisualizerController {
             }
         }
         boolean found = false;
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).equals(value)) {
+        for (int i = 0; i < arrayListModel.size(); i++) {
+            if (arrayListModel.get(i).equals(value)) {
                 valueLabels.get(i).getStyleClass().add("listValueLabel");
                 addLog("Element found at index : " + i);
                 found = true;
@@ -894,7 +933,7 @@ public class DataVisualizerController {
     }
 
     public void listClearBtn(ActionEvent actionEvent) {
-        list.clear();
+        arrayListModel.clear();
         visualizationPanelCard.getChildren().clear();
         inpField.clear();
         sizeField.clear();
@@ -917,7 +956,7 @@ public class DataVisualizerController {
             addErrorLog("Please enter a " + selectedDataType + " value.");
             return;
         }
-        linkedList.add(value);
+        linkedListModel.add(value);
         addLog("Added value: " + value);
         refreshLinkedList();
         linkedListInpField.clear();
@@ -938,11 +977,12 @@ public class DataVisualizerController {
             addErrorLog("Please Enter a value to remove");
             return;
         }
-        if(linkedList.isEmpty()){
+        boolean empty = linkedListModel.isEmpty();
+        if(empty){
             addErrorLog("Linked list is empty.");
             return;
         }
-        boolean removed = linkedList.remove(value);
+        boolean removed = linkedListModel.remove(value);
         if(removed){
             refreshLinkedList();
             linkedListInpField.clear();
@@ -951,47 +991,7 @@ public class DataVisualizerController {
             addErrorLog(value+" not found.");
         }
     }
-//        String value = linkedListInpField.getText().trim();
-//
-//        if (value.isEmpty()) {
-//            addErrorLog("Enter value!");
-//            return;
-//        }
-//
-//        int index = linkedList.indexOf(value);
-//
-//        if (index == -1) {
-//            addErrorLog("Value not found!");
-//            return;
-//        }
-//
-//        animateRemove(index);
-//}
-//    private void animateRemove(int index) {
-//
-//        VBox node = linkedNodeLabels.get(index);
-//
-//        // Fade animation
-//        FadeTransition fade = new FadeTransition(Duration.seconds(0.5), node);
-//        fade.setFromValue(1);
-//        fade.setToValue(0);
-//
-//        // Move upward animation
-//        TranslateTransition move = new TranslateTransition(Duration.seconds(0.5), node);
-//        move.setByY(-40);
-//
-//        ParallelTransition animation = new ParallelTransition(fade, move);
-//
-//        animation.setOnFinished(e -> {
-//
-//            linkedList.remove(index);
-//
-//            refreshLinkedList();
-//
-//        });
-//
-//        animation.play();
-//    }
+
     public void linkedListSearchBtn(ActionEvent actionEvent) {
         String searchValue = linkedListInpField.getText().trim();
 
@@ -1003,7 +1003,7 @@ public class DataVisualizerController {
             label.getStyleClass().removeAll("currentNode","foundNode");
         }
         Timeline timeline = new Timeline();
-        for(int i=0; i<linkedList.size();i++){
+        for(int i=0; i<linkedListModel.size();i++){
             final int index = i;
 
             KeyFrame keyFrame = new KeyFrame(
@@ -1014,7 +1014,7 @@ public class DataVisualizerController {
                         }
                         Label current = linkedNodeLabels.get(index);
 
-                        if(linkedList.get(index).equals(searchValue)){
+                        if(linkedListModel.get(index).equals(searchValue)){
                             current.getStyleClass().remove("currentNode");
                             current.getStyleClass().add("foundNode");
                             addLog(searchValue +" found at index "+index);
@@ -1027,7 +1027,7 @@ public class DataVisualizerController {
             timeline.getKeyFrames().add(keyFrame);
         }
         timeline.setOnFinished(e->{
-            if(!linkedList.contains(searchValue)){
+            if(!linkedListModel.contains(searchValue)){
                 addErrorLog(searchValue +" not found");
             }
         });
@@ -1037,7 +1037,7 @@ public class DataVisualizerController {
     public void linkedListClearBtn(ActionEvent actionEvent) {
         visualizationPanelCard.getChildren().clear();
         linkedListInpField.clear();
-        linkedList.clear();
+        linkedListModel.clear();
     }
 
     private void refreshLinkedList() {
@@ -1046,11 +1046,11 @@ public class DataVisualizerController {
         visualizationPanelCard.setAlignment(Pos.CENTER);
         visualizationPanelCard.setSpacing(15);
         linkedNodeLabels.clear();
-        for (int i = 0; i < linkedList.size(); i++) {
+        for (int i = 0; i < linkedListModel.size(); i++) {
 
             VBox node = new VBox();
             node.setAlignment(Pos.CENTER);
-            Label value = new Label(linkedList.get(i));
+            Label value = new Label(linkedListModel.get(i));
             value.setPrefSize(100, 40);
             value.setAlignment(Pos.CENTER);
             value.getStyleClass().add("listValueCell");
@@ -1063,7 +1063,7 @@ public class DataVisualizerController {
 
             visualizationPanelCard.getChildren().add(node);
 
-            if (i != linkedList.size() - 1) {
+            if (i != linkedListModel.size() - 1) {
 
                 Label arrow = new Label("➜");
                 arrow.setStyle("-fx-font-size:28;");
@@ -1078,28 +1078,39 @@ public class DataVisualizerController {
                 nullNode.setPrefSize(60, 70);
                 nullNode.setStyle("-fx-text-fill:red;-fx-font-size:18;");
                 visualizationPanelCard.getChildren().add(nullNode);
-
             }
-
         }
-
     }
 
     public void treeSetAddBtn(ActionEvent actionEvent) {
-        String value = treeSetInpField.getText();
+        String value = treeSetInpField.getText().trim();
+        if (value.isBlank()) {
+            addErrorLog("Please Enter a value.");
+            return;
+        }
         if(!isValidDataType(value)){
-                addErrorLog("Please Enter a " + selectedDataType + " value.");
-                return;
-            }
-            if (value.isBlank()) {
-                return;
-            }
-            if (treeSet.size() == capacity) {
-                capacity = capacity + capacity / 2;
+            addErrorLog("Please Enter a " + selectedDataType + " value.");
+            return;
+        }
+        int currentSize;
+        if("Integer".equals(selectedDataType)){
+            currentSize = treeSetIntegerModel.size();
+        }else {
+            currentSize = treeSetStringModel.size();
+        }
+            if (currentSize == capacity) {
+                capacity = capacity + Math.max(1,capacity / 2);
                 addLog("Set capacity is increased by : " + capacity);
             }
             Object obj = convertValue(value,selectedDataType);
-            if (treeSet.add(obj)) {
+            boolean added;
+            if("Integer".equals(selectedDataType)){
+                added = treeSetIntegerModel.add((Integer) obj);
+            }else {
+                added = treeSetStringModel.add((String) obj);
+            }
+
+            if (added) {
                 addLog("Added : " + obj);
                refreshTreeSetVisualization();
             } else {
@@ -1107,51 +1118,39 @@ public class DataVisualizerController {
                 addLog("Here the duplicate element is : " + value);
             }
             treeSetInpField.clear();
-
     }
 
     public void treeSetRemoveBtn(ActionEvent actionEvent) {
-
-
             String value = treeSetInpField.getText().trim();
-
             if (value.isBlank()) {
                 addErrorLog("Please Enter a value.");
                 return;
             }
-
             if (!isValidDataType(value)) {
                 addErrorLog("Please Enter a " + selectedDataType + " value.");
                 return;
             }
-
             try {
-
+                boolean removed;
+                if("Integer".equals(selectedDataType)){
+                    Integer intValue = Integer.parseInt(value);
+                    removed = treeSetIntegerModel.remove(intValue);
+                }else {
+                    removed = treeSetStringModel.remove(value);
+                }
                 Object removeValue = convertValue(value, selectedDataType);
-
-                if (treeSet.remove(removeValue)) {
-
+                if (removed) {
                     addLog("Removed : " + removeValue);
-
                     // Search highlight use chestunte clear cheyyi
                     searchedValue = null;
-
                     refreshTreeSetVisualization();
-
                 } else {
-
                     addErrorLog(removeValue + " not found.");
-
                 }
-
             } catch (Exception e) {
-
                 addErrorLog("Invalid input.");
-
             }
-
             treeSetInpField.clear();
-
     }
 
     public void treeSetSearchBtn(ActionEvent actionEvent) {
@@ -1160,19 +1159,49 @@ public class DataVisualizerController {
             addErrorLog("Please Enter a value");
             return;
         }
-        Object searchValue = convertValue(value,selectedDataType);
-        if(treeSet.contains(searchValue)){
-            searchedValue = searchValue;
-            refreshTreeSetVisualization();
-            addLog(searchValue+" is found");
-        }else {
-            searchedValue=null;
-            refreshTreeSetVisualization();
-            addErrorLog(searchValue+" is not found.");
+        try {
+            Object searchValue;
+            boolean found;
+            if("Integer".equals(selectedDataType)){
+                Integer intValue = Integer.parseInt(value);
+                found = treeSetIntegerModel.contains(intValue);
+                searchValue = intValue;
+            }else{
+                found = treeSetStringModel.contains(value);
+                searchValue = value;
+            }
+
+            if(found){
+                searchedValue = searchValue;
+                refreshTreeSetVisualization();
+                addLog(searchValue + " is found.");
+            }else {
+                searchedValue = null;
+                refreshTreeSetVisualization();
+                addErrorLog(searchValue+" is not found.");
+            }
+        }catch (Exception e){
+            addErrorLog("Invalid Input.");
         }
+//        Object searchValue = convertValue(value,selectedDataType);
+//        if(treeSet.contains(searchValue)){
+//            searchedValue = searchValue;
+//            refreshTreeSetVisualization();
+//            addLog(searchValue+" is found");
+//        }else {
+//            searchedValue=null;
+//            refreshTreeSetVisualization();
+//            addErrorLog(searchValue+" is not found.");
+//        }
         treeSetInpField.clear();
     }
 
     public void treeSetClearBtn(ActionEvent actionEvent) {
+        treeSetIntegerModel.clear();
+        treeSetStringModel.clear();
+        searchedValue = null;
+        visualizationPanelCard.getChildren().clear();
+        treeSetInpField.clear();
+        addLog("TreeSet Cleared.");
     }
 }
