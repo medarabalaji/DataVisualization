@@ -17,12 +17,13 @@ public class HashMapModel<K,V> implements MapDataStructure<K,V> {
     }
 
     @Override
-    public boolean remove(K key) {
-        if(!hashMap.containsKey(key)){
-            return false;
-        }
-        hashMap.remove(key);
-        return true;
+    public boolean removeKey(K key) {
+       return hashMap.remove(key) != null;
+    }
+
+    @Override
+    public boolean removeValue(V value){
+        return hashMap.values().remove(value);
     }
 
     @Override

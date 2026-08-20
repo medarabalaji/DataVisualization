@@ -7,7 +7,9 @@ public interface MapDataStructure<K,V>{
 
     V get(K key);
 
-    boolean remove(K key);
+    boolean removeKey(K key);
+
+    boolean removeValue(V value);
 
     boolean containsKey(K key);
 

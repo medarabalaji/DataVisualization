@@ -8,8 +8,7 @@ public class TreeSetModel<T extends Comparable<T>> implements DataStructure<T> {
 
     @Override
     public boolean add(T value) {
-        treeSet.add(value);
-        return false;
+        return treeSet.add(value);
     }
 
     @Override

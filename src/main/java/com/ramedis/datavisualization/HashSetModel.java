@@ -8,8 +8,7 @@ public class HashSetModel<T> implements DataStructure<T> {
 
     @Override
     public boolean add(T value) {
-        hashSet.add(value);
-        return false;
+        return hashSet.add(value);
     }
 
     @Override

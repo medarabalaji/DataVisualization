@@ -17,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.FontIcon;
 
+import javax.swing.plaf.IconUIResource;
 import java.util.*;
 
 public class DataVisualizerController {
@@ -126,7 +127,7 @@ public class DataVisualizerController {
 //    private ArrayList<String> list = new ArrayList<>();
     private ArrayListModel<String> arrayListModel;
     private LinkedListModel<String> linkedListModel;
-    private HashSetModel<String> hashSetModel;
+    private HashSetModel<Object> hashSetModel;
     private HashMapModel<Object, Object> hashMapModel;
     private TreeSetModel<String> treeSetStringModel;
     private TreeSetModel<Integer> treeSetIntegerModel;
@@ -149,8 +150,12 @@ public class DataVisualizerController {
     private final List<Label> linkedNodeLabels = new ArrayList<>();
 //    private TreeSet<Object> treeSet= new TreeSet<>();
     private Object searchedValue = null;
+    private final List<Label> hashSetValueLabels = new ArrayList<>();
+    private final List<Label> hashMapLabels = new ArrayList<>();
+    private final Map<Object,Label> hashMapKeyLabels = new LinkedHashMap<>();
 
-
+    private Timeline hashMapSearchTimeline;
+    private ScaleTransition hashMapScaleTransition;
     public void initialize() {
 
         arrayListModel=new ArrayListModel<>();
@@ -217,21 +222,43 @@ public class DataVisualizerController {
     @FXML
     private void refreshHashMapVisualization() {
         visualizationPanelCard.getChildren().clear();
-        for (Map.Entry<Object, Object> entry : hashMapModel.getValues().entrySet()) {
-            Label mapLabel = new Label(entry.getKey() + " : " + entry.getValue());
-            mapLabel.setTextFill(Color.BLUE);
-            mapLabel.setPrefSize(250, 40);
-            mapLabel.setAlignment(Pos.CENTER);
-            mapLabel.getStyleClass().add("mapLabel");
+        hashMapLabels.clear();
+        hashMapKeyLabels.clear();
 
-            visualizationPanelCard.getChildren().add(mapLabel);
+        for (Map.Entry<Object, Object> entry : hashMapModel.getValues().entrySet()) {
+            VBox box = new VBox(5);
+            box.setAlignment(Pos.CENTER);
+            box.setPrefWidth(180);
+
+            Label keyLabel = new Label("Key: "+entry.getKey());
+            keyLabel.setPrefSize(180,40);
+            keyLabel.setAlignment(Pos.CENTER);
+            keyLabel.getStyleClass().add("hashMapKeyCell");
+
+            Label valueLabel = new Label("Value: "+entry.getValue());
+            valueLabel.setPrefSize(180,40);
+            valueLabel.setAlignment(Pos.CENTER);
+            valueLabel.getStyleClass().add("hashMapValueCell");
+
+            hashMapLabels.add(keyLabel);
+            hashMapKeyLabels.put(entry.getKey(),keyLabel);
+
+            box.getChildren().addAll(keyLabel,valueLabel);
+            visualizationPanelCard.getChildren().add(box);
+//            mapLabel.setTextFill(Color.BLUE);
+//            mapLabel.setPrefSize(200, 50);
+//            mapLabel.setAlignment(Pos.CENTER);
+//            mapLabel.getStyleClass().add("mapLabel");
+//
+//            visualizationPanelCard.getChildren().add(mapLabel);
         }
     }
 
     @FXML
     private void refreshHashSetVisualization() {
         visualizationPanelCard.getChildren().clear();
-        List<String> values = new ArrayList<>(hashSetModel.getValues());
+        hashSetValueLabels.clear();
+        List<Object> values = new ArrayList<>(hashSetModel.getValues());
         for (int i = 0; i < capacity; i++) {
             Label indexCell = new Label(String.valueOf(i));
             indexCell.setAlignment(Pos.CENTER);
@@ -243,10 +270,11 @@ public class DataVisualizerController {
             valueCell.getStyleClass().add("setValueCell");
 
             if (i < values.size()) {
-                valueCell.setText(values.get(i));
+                valueCell.setText(String.valueOf(values.get(i)));
+                hashSetValueLabels.add(valueCell);
             }
 
-            VBox box = new VBox(5);
+            VBox box = new VBox();
             box.setAlignment(Pos.CENTER);
             box.getChildren().addAll(indexCell, valueCell);
             visualizationPanelCard.getChildren().add(box);
@@ -275,8 +303,9 @@ public class DataVisualizerController {
             valueCell.getStyleClass().add("setValueCell");
 
             if (i < values.size()) {
-                valueCell.setText(values.get(i).toString());
-                if(searchedValue != null && values.get(i).equals(searchedValue)){
+                Object currentValue = values.get(i);
+                valueCell.setText(String.valueOf(currentValue));
+                if(searchedValue != null && currentValue.equals(searchedValue)){
                     valueCell.getStyleClass().add("listValueLabel");
                 };
             }
@@ -375,12 +404,23 @@ public class DataVisualizerController {
         }
         switch (implementation) {
             case "ArrayList":
+                String capacityText = sizeField.getText().trim();
+
+                if (capacityText.isEmpty()) {
+                    addErrorLog("Please Enter a valid capacity");
+                    return;
+                }
+                if(selectedDataType==null){
+                    addErrorLog("Please Select a data type.");
+                    return;
+                }
                 try {
                     capacity = Integer.parseInt(sizeField.getText());
                     arrayListModel.clear();
                     valueLabels.clear();
                     visualizationPanelCard.getChildren().clear();
                     refreshArrayListVisualization();
+//                    addLog("ArrayList visualisation initialized with capacity of "+capacity);
                 } catch (NumberFormatException e) {
                     addErrorLog("Please Enter a valid capacity");
                 }
@@ -400,8 +440,21 @@ public class DataVisualizerController {
                 break;
 
             case "HashSet":
+                String capacityHashSet = sizeField.getText().trim();
+                if(capacityHashSet.isEmpty()){
+                    addErrorLog("Please Enter a valid capacity.");
+                    return;
+                }
+                if(selectedDataType==null){
+                    addErrorLog("Please Select a datatype");
+                    return;
+                }
                 try {
-                    capacity = Integer.parseInt(sizeField.getText());
+                    capacity = Integer.parseInt(capacityHashSet);
+                    if(capacity<=0){
+                        addErrorLog("Capacity must be greater than 0");
+                        return;
+                    }
                     hashSetModel.clear();
                     visualizationPanelCard.getChildren().clear();
 
@@ -414,9 +467,25 @@ public class DataVisualizerController {
                 }
                 break;
             case "TreeSet":
+                String capacityTreeSet = sizeField.getText().trim();
+
+                if(capacityTreeSet.isEmpty()){
+                    addErrorLog("Please Enter a valid capacity");
+                    return;
+                }
+                if(selectedDataType==null){
+                    addErrorLog("Please Select a data type.");
+                    return;
+                }
                 try {
                     capacity=Integer.parseInt(sizeField.getText());
+                    if(capacity<=0){
+                        addErrorLog("Capacity must be greater than 0.");
+                        return;
+                    }
+                    treeSetStringModel.clear();
                     treeSetIntegerModel.clear();
+                    searchedValue=null;
                     visualizationPanelCard.getChildren().clear();
                     refreshTreeSetVisualization();
                     addLog("TreeSet visualization initilized with capacity of "+capacity);
@@ -425,16 +494,33 @@ public class DataVisualizerController {
                 }
                 break;
             case "HashMap":
+                String hashMapCapacityText = sizeField.getText().trim();
 
+                if(hashMapCapacityText.isEmpty()){
+                    addErrorLog("Please enter a valid capacity.");
+                    return;
+                }
+                if(selectedKeyType == null){
+                    addErrorLog("Please select a key data type.");
+                    return;
+                }
+                if(selectedValueType == null){
+                    addErrorLog("Please select a value data type.");
+                    return;
+                }
                 try {
-                    capacity = Integer.parseInt(sizeField.getText());
+                    capacity = Integer.parseInt(hashMapCapacityText);
+                    if (capacity <= 0){
+                        addErrorLog("Capacity must be greater than 0.");
+                        return;
+                    }
 
                     hashMapModel.clear();
                     visualizationPanelCard.getChildren().clear();
-
+                    hashMapLabels.clear();
                     refreshHashMapVisualization();
 
-                    addLog("HashMap visualization initialized.");
+                    addLog("HashMap visualization initialized with capacity of "+capacity);
 
                 } catch (NumberFormatException e) {
                     addErrorLog("Please enter a valid capacity.");
@@ -487,7 +573,8 @@ public class DataVisualizerController {
         visualizationPanelCard.getChildren().clear();
         capacityLabel.setVisible(true);
         sizeField.setVisible(true);
-        dataTypeCmb.clear();
+        dataTypeCmb.clearSelection();
+        selectedDataType=null;
         arrayListModel.clear();
         inpField.clear();
         sizeField.clear();
@@ -517,14 +604,35 @@ public class DataVisualizerController {
         operationPanelCard.setVisible(false);
         linkedListOperationPanelCard.setVisible(false);
         treeSetOperationPanelCard.setVisible(false);
+
         operationPanelCard2.setVisible(true);
         operationPanelCard3.setVisible(false);
+
         capacityLabel.setVisible(true);
         sizeField.setVisible(true);
+
         dataTypeCmb.setVisible(false);
-        dataTypeCmb.clear();
+        dataTypeCmb.clearSelection();
+        selectedDataType = null;
+
         keyValueTypeCmb.setVisible(true);
+
+        keyTypeCmb.clearSelection();
+        valueTypeCmb.clearSelection();
+
+        selectedKeyType = null;
+        selectedValueType = null;
+
         visualizationPanelCard.getChildren().clear();
+
+        hashMapModel.clear();
+        hashMapLabels.clear();
+
+        sizeField.clear();
+        keyField.clear();
+        valueField.clear();
+
+        capacity = 0;
     }
 
     private void configureSetListUI() {
@@ -552,7 +660,8 @@ public class DataVisualizerController {
         operationPanelCard3.setVisible(false);
         treeSetOperationPanelCard.setVisible(true);
         dataTypeCmb.setVisible(true);
-        dataTypeCmb.clear();
+        dataTypeCmb.clearSelection();
+        selectedDataType=null;
         capacityLabel.setVisible(true);
         sizeField.setVisible(true);
         keyValueTypeCmb.setVisible(false);
@@ -632,44 +741,103 @@ public class DataVisualizerController {
             addErrorLog("Please Enter a " + selectedDataType + " value.");
             return;
         }
+        if(selectedDataType==null){
+            addErrorLog("Please select a data type.");
+        }
         if (value.isBlank()) {
             addErrorLog("Please Enter a Value.");
             return;
         }
+        Object convertedValue = convertValue(value,selectedDataType);
         if (hashSetModel.size() >= capacity) {
             capacity = capacity + Math.max(1, capacity / 2);
             addLog("Set capacity is increased by : " + capacity);
             refreshHashSetVisualization();
         }
-        if (hashSetModel.add(value)) {
-            addLog("Added : " + value);
+        if (hashSetModel.add(convertedValue)) {
+            addLog("Added : " + convertedValue);
             refreshHashSetVisualization();
         } else {
             addErrorLog("Duplicate Element is not allowed");
-            addLog("Here the duplicate element is : " + value);
+            addLog("Here the duplicate element is : " + convertedValue);
         }
         setInpField.clear();
     }
 
     public void removeSetBtn(ActionEvent actionEvent) {
         String value = setInpField.getText();
-        if (hashSetModel.remove(value)) {
-            addLog("Removed : " + value);
+        if(value.isBlank()){
+            addErrorLog("Please Enter a value to remove.");
+            return;
+        }
+        Object removedValue = convertValue(value,selectedDataType);
+        if (hashSetModel.remove(removedValue)) {
+            addLog("Removed : " + removedValue);
             refreshHashSetVisualization();
         } else {
-            addErrorLog("Element not found");
+            addErrorLog(removedValue+" is not found");
         }
         setInpField.clear();
     }
 
     public void searchSetBtn(ActionEvent actionEvent) {
-        String value = setInpField.getText();
-        if (hashSetModel.contains(value)) {
-            addLog("Found : " + value);
-        } else {
-            addErrorLog(value + " not found");
+        String value = setInpField.getText().trim();
+        if(value.isBlank()){
+            addErrorLog("Please Enter a value to search.");
+            return;
         }
+        if(!isValidDataType(value)){
+            addErrorLog("Please Enter a "+selectedDataType+" value.");
+            return;
+        }
+        Object searchValue = convertValue(value, selectedDataType);
+        for (Label label : hashSetValueLabels){
+            label.getStyleClass().removeAll("presentNode","finalNode");
+        }
+        List<Object> values = new ArrayList<>(hashSetModel.getValues());
+
+        Timeline timeline = new Timeline();
+
+        for(int i=0; i< values.size(); i++){
+            final int index =i;
+            KeyFrame keyFrame = new KeyFrame(
+                    Duration.seconds((i+1)*0.7),
+                    event ->{
+                        for(Label label:hashSetValueLabels){
+                            label.getStyleClass().remove("presentNode");
+                        }
+                        //safety check
+                        if(index >= hashSetValueLabels.size()){
+                            return;
+                        }
+                        Label presentLabel = hashSetValueLabels.get(index);
+                        Object presentValue = values.get(index);
+
+                        if(presentValue.equals(searchValue)){
+                            presentLabel.getStyleClass().add("finalNode");
+                            addLog(searchValue+ " is found.");
+                            timeline.stop();
+                        }else{
+                            presentLabel.getStyleClass().add("presentNode");
+                        }
+                    }
+            );
+            timeline.getKeyFrames().add(keyFrame);
+        }
+        timeline.setOnFinished(event ->{
+            if(!hashSetModel.contains(searchValue)){
+                addErrorLog(searchValue+" is not found.");
+            }
+        });
+        timeline.play();
         setInpField.clear();
+
+//        if (hashSetModel.contains(searchValue)) {
+//            addLog("Found : " + searchValue);
+//        } else {
+//            addErrorLog(searchValue + " not found");
+//        }
+//        setInpField.clear();
     }
 
     public void clearSetBtn(ActionEvent actionEvent) {
@@ -678,66 +846,244 @@ public class DataVisualizerController {
         addLog("Hashset cleared");
     }
 
+    private void clearHashMapSearchStyles(){
+        for(Label label : hashMapLabels){
+            label.getStyleClass().removeAll("presentHashMapNode","foundHashMapNode");
+            label.setScaleX(1);
+            label.setScaleY(1);
+        }
+    }
+
+    private void playHashMapSearchAnimation(Label label){
+        if(hashMapScaleTransition != null){
+            hashMapScaleTransition.stop();
+        }
+
+        hashMapScaleTransition = new ScaleTransition(
+                Duration.millis(250),label
+        );
+
+        hashMapScaleTransition.setFromX(1.0);
+        hashMapScaleTransition.setFromY(1.0);
+
+        hashMapScaleTransition.setToX(1.15);
+        hashMapScaleTransition.setToY(1.15);
+
+        hashMapScaleTransition.setAutoReverse(true);
+        hashMapScaleTransition.setCycleCount(2);
+
+        hashMapScaleTransition.play();
+    }
+
     public void putBtn(ActionEvent actionEvent) {
         String keyText = keyField.getText().trim();
         String valueText = valueField.getText().trim();
-        if (keyText.isBlank() || valueText.isBlank()) {
-            addErrorLog("Please Enter both key and value");
+        if(selectedKeyType == null){
+            addErrorLog("Please Select a key data type");
             return;
         }
+        if(selectedValueType == null){
+            addErrorLog("Please Select a value data type.");
+            return;
+        }
+        if(keyText.isBlank()){
+            addErrorLog("Please Enter a key.");
+            return;
+        }
+        if(valueText.isBlank()){
+            addErrorLog("Please Enter a value.");
+            return;
+        }
+
         try {
             Object key = convertValue(keyText, selectedKeyType);
             addLog(key + " is entered");
             Object value = convertValue(valueText, selectedValueType);
             addLog(value + " is entered");
-            hashMapModel.put(key, value);
-            addLog(key+" : "+value+" added.");
+            if(hashMapModel.containsKey(key)){
+                Object oldValue = hashMapModel.get(key);
+                hashMapModel.put(key,value);
+                addLog("Key "+key+" already exists. Value changed from "+oldValue+" to "+value);
+            }else {
+                hashMapModel.put(key,value);
+                addLog("Added Key : "+key+" | Value: "+value);
+            }
             refreshHashMapVisualization();
-            keyField.clear();
-            valueField.clear();
-        } catch (Exception e) {
-            addLog("Invalid key-value type");
+        }catch (NumberFormatException e){
+            addErrorLog("Invalid key/value data type.");
+        }catch (Exception e) {
+            addLog("Unable to add key-value pair.");
         }
+        keyField.clear();
+        valueField.clear();
     }
 
     public void mapRemoveBtn(ActionEvent actionEvent) {
-        String keyText = keyField.getText();
+        String keyText = keyField.getText().trim();
         if (keyText.isBlank()) {
-            addErrorLog("Please enter a key");
+            addErrorLog("Please enter a key to remove.");
+            return;
         }
+        if(selectedKeyType==null){
+            addErrorLog("Please Select a key data type.");
+            return;
+        }
+
         try {
             Object key = convertValue(keyText, selectedKeyType);
-            if (hashMapModel.containsKey(key)) {
-                hashMapModel.remove(key);
-                refreshHashMapVisualization();
-                addLog(key + " removed Successfully");
-            } else {
-                addErrorLog(key + " not found");
+            if (!hashMapModel.containsKey(key)) {
+                addErrorLog("Key " + key + " is not found.");
+                keyField.clear();
+                return;
             }
-        } catch (Exception e) {
-            addErrorLog("Invalid Key");
+            Object value = hashMapModel.get(key);
+            hashMapModel.removeKey(key);
+            addLog("Removed Key: "+key+" | Value: "+value);
+            refreshHashMapVisualization();
+        }catch(Exception e){
+            addErrorLog("Invalid Key.");
         }
         keyField.clear();
     }
 
     public void mapSearchBtn(ActionEvent actionEvent) {
-        String keyText = keyField.getText();
-        if (keyText.isBlank()) {
-            addErrorLog("Please enter a key");
+        String keyText = keyField.getText().trim();
+        if (keyText.isEmpty()) {
+            addErrorLog("Please enter a key to search.");
             return;
         }
-        try {
-            Object key = convertValue(keyText, selectedKeyType);
-            if (hashMapModel.containsKey(key)) {
-                Object value = hashMapModel.get(key);
-                addLog("Key is " + key + " and value is " + value);
-            } else {
-                addErrorLog("Key not found");
-            }
-        } catch (Exception e) {
-            addErrorLog("Invalid key");
+        if(selectedKeyType==null){
+            addErrorLog("Please select a key data type.");
+            return;
         }
+
+        Object searchKey;
+        try{
+            searchKey = convertValue(keyText,selectedKeyType);
+        }catch (NumberFormatException e){
+            addErrorLog("Please enter a valid "+selectedKeyType+" key.");
+            keyField.clear();
+            return;
+        }
+        if(hashMapSearchTimeline != null){
+            hashMapSearchTimeline.stop();
+        }
+
+        if(hashMapScaleTransition != null){
+            hashMapScaleTransition.stop();
+        }
+
+        List<Map.Entry<Object, Object>> entries = new ArrayList<>(hashMapModel.getValues().entrySet());
+        if(entries.isEmpty()){
+            addErrorLog("HashMap is empty.");
+            keyField.clear();
+            return;
+        }
+
+        clearHashMapSearchStyles();
+
+        final int[] currentIndex = {0};
+
+        hashMapSearchTimeline = new Timeline(
+                new KeyFrame(Duration.millis(700),
+                        event -> {
+                    if(currentIndex[0] >= entries.size()){
+                        hashMapSearchTimeline.stop();
+                        addErrorLog("Key "+searchKey+" is not found.");
+                        return;
+                    }
+
+                    for(Label label :hashMapLabels){
+                        label.getStyleClass().remove("presentHashMapNode");
+                    }
+
+                    Map.Entry<Object,Object> entry = entries.get(currentIndex[0]);
+                    Object currentKey = entry.getKey();
+                    Object currentValue = entry.getValue();
+
+                    Label currentKeyLabel = hashMapKeyLabels.get(currentKey);
+                    if(currentKeyLabel == null){
+                        currentIndex[0]++;
+                        return;
+                    }
+
+                    if(Objects.equals(currentKey,searchKey)){
+                        if(hashMapScaleTransition != null){
+                            hashMapScaleTransition.stop();
+                        }
+                        currentKeyLabel.getStyleClass().remove("presentHashMapNode");
+                        if(!currentKeyLabel.getStyleClass().contains("foundHashMapNode")) {
+                            currentKeyLabel.getStyleClass().add("foundHashMapNode");
+                        }
+
+                        currentKeyLabel.setScaleX(1);
+                        currentKeyLabel.setScaleY(1);
+
+                        currentKeyLabel.applyCss();
+//                        playHashMapSearchAnimation(currentKeyLabel);
+                        addLog("Key = "+currentKey+" found. Value = "+currentValue);
+                        hashMapSearchTimeline.stop();
+                        return;
+                    }
+                    currentKeyLabel.getStyleClass().add("presentHashMapNode");
+                    playHashMapSearchAnimation(currentKeyLabel);
+                    addLog("Searching...checking key = "+currentKey);
+                    currentIndex[0]++;
+                        }
+                )
+        );
+        hashMapSearchTimeline.setCycleCount(Timeline.INDEFINITE);
+        hashMapSearchTimeline.playFromStart();
         keyField.clear();
+
+//        for(Label label: hashMapLabels){
+//            label.getStyleClass().removeAll("presentHashMapNode","foundHashMapNode");
+//        }
+//
+//
+//        hashMapSearchTimeline = new Timeline();
+//
+//        final boolean[] found = {false};
+//
+//        for(int i=0; i<entries.size(); i++){
+//            final int index = i;
+//            KeyFrame keyFrame = new KeyFrame(Duration.seconds((i+1)*0.7),
+//                    event ->{
+//                        for(Label label : hashMapLabels){
+//                            label.getStyleClass().remove("presentHashMapNode");
+//                        }
+//                        if(index >= hashMapLabels.size()){
+//                            return;
+//                        }
+//
+//                        Map.Entry<Object,Object> entry = entries.get(index);
+//                        Object currentKey = entry.getKey();
+//                        Object currentValue = entry.getValue();
+//                        Label currentKeyLabel = hashMapLabels.get(index);
+//
+//                        if(Objects.equals(currentKey,searchKey)){
+//                            found[0] = true;
+//                            currentKeyLabel.getStyleClass().remove("presentHashMapNode");
+//                            currentKeyLabel.getStyleClass().add("foundHashMapNode");
+//                            addLog("Key = "+searchKey+" found. Value = "+currentValue);
+//                        }else {
+//                            currentKeyLabel.getStyleClass().add("presentHashMapNode");
+//                            addLog("Searching... checking key = "+currentKey);
+//                        }
+//                    });
+//            hashMapSearchTimeline.getKeyFrames().add(keyFrame);
+//        }
+//        hashMapSearchTimeline.setOnFinished(event ->{
+//            if(!found[0]){
+//                addErrorLog("Key "+searchKey+" is not found.");
+//            }
+//
+//            for(Label label: hashMapLabels){
+//                label.getStyleClass().remove("presentHashMapNode");
+//            }
+//        });
+//        hashMapSearchTimeline.playFromStart();
+//        keyField.clear();
     }
 
     public void mapClearBtn(ActionEvent actionEvent) {
@@ -755,13 +1101,17 @@ public class DataVisualizerController {
 
 
     private boolean isValidDataType(String value) {
+        if(selectedDataType==null){
+            return false;
+        }
         switch (selectedDataType) {
             case "String":
-                addLog("String is selected");
+
                 return true;
             case "Integer":
                 try {
                     Integer.parseInt(value);
+
                     return true;
                 } catch (NumberFormatException e) {
                     return false;
@@ -858,17 +1208,23 @@ public class DataVisualizerController {
     public void listAddBtn(ActionEvent actionEvent) {
         String value = inpField.getText();
 //  System.out.println(sizeField.getStyleClass());
+
+        if (value.isBlank()) {
+            addErrorLog("Please Enter a value.");
+            return;
+        }
+        if(selectedDataType == null){
+            addErrorLog("Please Select a data type.");
+            return;
+        }
         if (!isValidDataType(value)) {
             addErrorLog("Please Enter a " + selectedDataType + " value.");
             return;
         }
-        if (value.isBlank()) {
-            return;
-        }
         if (arrayListModel.size() == capacity) {
-            capacity = capacity + capacity / 2;
-            addLog("Array Capacity is increased by : " + capacity);
-//            refreshArrayListVisualization();
+            capacity = capacity + Math.max(1,capacity / 2);
+//            addLog("Array Capacity is increased by : " + capacity);
+            refreshArrayListVisualization();
         }
         arrayListModel.add(value);
         addLog("Added value : " + value + " and its Index is " + (arrayListModel.size() - 1));
@@ -1011,6 +1367,7 @@ public class DataVisualizerController {
                     e->{
                         for (Label label:linkedNodeLabels){
                             label.getStyleClass().remove("currentNode");
+
                         }
                         Label current = linkedNodeLabels.get(index);
 
@@ -1088,35 +1445,40 @@ public class DataVisualizerController {
             addErrorLog("Please Enter a value.");
             return;
         }
+        if(selectedDataType==null){
+            addErrorLog("Please Select a data type.");
+            return;
+        }
         if(!isValidDataType(value)){
             addErrorLog("Please Enter a " + selectedDataType + " value.");
             return;
         }
-        int currentSize;
+//        int currentSize;
+        Object convertedValue = convertValue(value,selectedDataType);
+        boolean added;
         if("Integer".equals(selectedDataType)){
-            currentSize = treeSetIntegerModel.size();
+            added = treeSetIntegerModel.add((Integer) convertedValue);
         }else {
-            currentSize = treeSetStringModel.size();
+            added = treeSetStringModel.add((String) convertedValue);
         }
-            if (currentSize == capacity) {
-                capacity = capacity + Math.max(1,capacity / 2);
-                addLog("Set capacity is increased by : " + capacity);
-            }
-            Object obj = convertValue(value,selectedDataType);
-            boolean added;
+        if(added){
+            int currentSize;
             if("Integer".equals(selectedDataType)){
-                added = treeSetIntegerModel.add((Integer) obj);
+                currentSize = treeSetIntegerModel.size();
             }else {
-                added = treeSetStringModel.add((String) obj);
+                currentSize = treeSetStringModel.size();
             }
-
-            if (added) {
-                addLog("Added : " + obj);
-               refreshTreeSetVisualization();
-            } else {
-                addErrorLog("Duplicate Element is not allowed");
-                addLog("Here the duplicate element is : " + value);
+            if(currentSize > capacity){
+                capacity = capacity+Math.max(1,capacity/2);
+                addLog("TreeSet capacity increased to "+capacity);
             }
+            searchedValue = null;
+            refreshTreeSetVisualization();
+            addLog("Added : "+convertedValue);
+        }else {
+            addErrorLog("Duplicate Element is not allowed.");
+            addLog("Duplicate Element : "+convertedValue);
+        }
             treeSetInpField.clear();
     }
 
@@ -1130,25 +1492,21 @@ public class DataVisualizerController {
                 addErrorLog("Please Enter a " + selectedDataType + " value.");
                 return;
             }
-            try {
-                boolean removed;
-                if("Integer".equals(selectedDataType)){
-                    Integer intValue = Integer.parseInt(value);
-                    removed = treeSetIntegerModel.remove(intValue);
-                }else {
-                    removed = treeSetStringModel.remove(value);
-                }
-                Object removeValue = convertValue(value, selectedDataType);
-                if (removed) {
-                    addLog("Removed : " + removeValue);
-                    // Search highlight use chestunte clear cheyyi
-                    searchedValue = null;
-                    refreshTreeSetVisualization();
-                } else {
-                    addErrorLog(removeValue + " not found.");
-                }
-            } catch (Exception e) {
-                addErrorLog("Invalid input.");
+
+            Object removedTreeSetValue = convertValue(value,selectedDataType);
+            boolean removed;
+
+            if("Integer".equals(selectedDataType)){
+                removed = treeSetIntegerModel.remove((Integer) removedTreeSetValue);
+            }else{
+                removed = treeSetStringModel.remove((String) removedTreeSetValue);
+            }
+            if(removed){
+                searchedValue=null;
+                refreshTreeSetVisualization();
+                addLog(removedTreeSetValue+" is removed successfully.");
+            }else{
+                addErrorLog(removedTreeSetValue+" is not found.");
             }
             treeSetInpField.clear();
     }
