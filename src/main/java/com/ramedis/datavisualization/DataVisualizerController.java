@@ -7,6 +7,7 @@ import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.mfxcore.base.beans.range.IntegerRange;
 import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -983,6 +984,7 @@ public class DataVisualizerController {
         clearHashMapSearchStyles();
 
         final int[] currentIndex = {0};
+        
 
         hashMapSearchTimeline = new Timeline(
                 new KeyFrame(Duration.millis(700),
